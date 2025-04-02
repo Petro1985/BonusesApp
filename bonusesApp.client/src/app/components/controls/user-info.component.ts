@@ -25,6 +25,7 @@ import { EqualValidator } from '../../directives/equal-validator.directive';
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
   styleUrl: './user-info.component.scss',
+  standalone: true,
   imports: [
     FormsModule, AutofocusDirective, NgClass, EqualValidator, NgSelectComponent, NgLabelTemplateDirective,
     NgOptionTemplateDirective, TranslateModule
