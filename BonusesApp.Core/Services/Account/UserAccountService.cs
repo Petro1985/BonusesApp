@@ -180,18 +180,6 @@ public class UserAccountService : IUserAccountService
         return true;
     }
 
-    public async Task<(bool Success, string[] Errors)> TestCanDeleteUserAsync(string userId)
-    {
-        var errors = new List<string>();
-
-        if (await _context.Orders.Where(o => o.CashierId == userId).AnyAsync())
-            errors.Add("User has associated orders");
-
-        //canDelete = !await ; //Do other tests...
-
-        return (errors.Count == 0, errors.ToArray());
-    }
-
     public async Task<(bool Succeeded, string[] Errors)> DeleteUserAsync(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);

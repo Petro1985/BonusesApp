@@ -18,7 +18,6 @@ public interface IUserAccountService
     Task<IList<string>> GetUserRolesAsync(ApplicationUser user);
     Task<List<(ApplicationUser User, string[] Roles)>> GetUsersAndRolesAsync(int page, int pageSize);
     Task<(bool Succeeded, string[] Errors)> ResetPasswordAsync(ApplicationUser user, string newPassword);
-    Task<(bool Success, string[] Errors)> TestCanDeleteUserAsync(string userId);
 
     Task<(bool Succeeded, string[] Errors)> UpdatePasswordAsync(ApplicationUser user, string currentPassword,
         string newPassword);

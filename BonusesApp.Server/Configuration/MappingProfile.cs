@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using BonusesApp.Core.Models.Account;
-using BonusesApp.Core.Models.Shop;
 using BonusesApp.Core.Services.Account;
 using BonusesApp.Server.ViewModels.Account;
-using BonusesApp.Server.ViewModels.Shop;
 using Microsoft.AspNetCore.Identity;
 
 namespace BonusesApp.Server.Configuration;
@@ -44,14 +42,5 @@ public class MappingProfile : Profile
 
         CreateMap<IdentityRoleClaim<string>, PermissionVM>()
             .ConvertUsing(s => ((PermissionVM)ApplicationPermissions.GetPermissionByValue(s.ClaimValue))!);
-
-        CreateMap<Customer, CustomerVM>()
-            .ReverseMap();
-
-        CreateMap<Product, ProductVM>()
-            .ReverseMap();
-
-        CreateMap<Order, OrderVM>()
-            .ReverseMap();
     }
 }

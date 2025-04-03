@@ -12,8 +12,6 @@ using BonusesApp.Core.Models.Account;
 using BonusesApp.Core.Services;
 using BonusesApp.Core.Services.Account;
 using BonusesApp.Core.Services.Account.Interfaces;
-using BonusesApp.Core.Services.Shop;
-using BonusesApp.Core.Services.Shop.Interfaces;
 using BonusesApp.Server.Authorization;
 using BonusesApp.Server.Authorization.Requirements;
 using BonusesApp.Server.Configuration;
@@ -188,9 +186,6 @@ builder.Services.Configure<AppSettings>(builder.Configuration);
 // Business Services
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IOrdersService, OrdersService>();
 
 // Other Services
 builder.Services.AddScoped<IEmailSender, EmailSender>();

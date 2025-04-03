@@ -272,14 +272,6 @@ public class UserAccountController : BaseApiController
         if (appUser == null)
             return NotFound(id);
 
-        var canDelete = await _userAccountService.TestCanDeleteUserAsync(id);
-        if (!canDelete.Success)
-        {
-            AddModelError($"User \"{appUser.UserName}\" cannot be deleted at this time. " +
-                          "Delete the associated records and try again.");
-            AddModelError(canDelete.Errors, "Records");
-        }
-
         if (ModelState.IsValid)
         {
             var userVM = await GetUserViewModelHelper(appUser.Id);

@@ -1,5 +1,4 @@
-﻿using BonusesApp.Core.Models.Shop;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace BonusesApp.Core.Models.Account;
 
@@ -38,9 +37,4 @@ public class ApplicationUser : IdentityUser, IAuditableEntity
     /// Navigation property for the claims this user possesses.
     /// </summary>
     public ICollection<IdentityUserClaim<string>> Claims { get; } = [];
-
-    /// <summary>
-    /// Demo Navigation property for orders this user has processed
-    /// </summary>
-    public ICollection<Order> Orders { get; } = [];
 }
