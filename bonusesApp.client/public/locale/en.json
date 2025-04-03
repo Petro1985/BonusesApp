@@ -362,9 +362,9 @@
     "Date": "Date",
     "Notification": "Notification"
   },
-  "todoDemo": {
+  "bonuses": {
     "management": {
-      "Search": "Search for task...",
+      "Search": "Search for phone number...",
       "HideCompleted": "Hide Completed",
       "AddTask": "Add Task",
       "Delete": "Delete task",

@@ -1,9 +1,3 @@
-// ---------------------------------------
-// Email: quickapp@ebenmonney.com
-// Templates: www.ebenmonney.com/templates
-// (c) 2024 www.ebenmonney.com/mit-license
-// ---------------------------------------
-
 import { Component, OnInit, OnDestroy, TemplateRef, inject, input, viewChild } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -28,19 +22,21 @@ interface Todo {
 }
 
 @Component({
-  selector: 'app-todo-demo',
-  templateUrl: './todo-demo.component.html',
-  styleUrl: './todo-demo.component.scss',
+  selector: 'app-bonuses',
+  templateUrl: './bonuses.component.html',
+  styleUrl: './bonuses.component.scss',
+  standalone: true,
   imports: [SearchBoxComponent, NgxDatatableModule, FormsModule, AutofocusDirective, NgbTooltip, NgClass, TranslateModule]
 })
-export class TodoDemoComponent implements OnInit, OnDestroy {
+export class BonusesComponent implements OnInit, OnDestroy {
   private alertService = inject(AlertService);
   private translationService = inject(AppTranslationService);
   private localStorage = inject(LocalStoreManager);
   private authService = inject(AuthService);
   private modalService = inject(NgbModal);
 
-  public static readonly DBKeyTodoDemo = 'todo-demo.todo_list';
+  // todo: вероятно не нужно
+  public static readonly DBKeyBonuses = 'bonuses.todo_list';
 
   columns: TableColumn[] = [];
   rows: Todo[] = [];
@@ -241,12 +237,12 @@ export class TodoDemoComponent implements OnInit, OnDestroy {
   }
 
   getFromDisk() {
-    return this.localStorage.getDataObject<Todo[]>(`${TodoDemoComponent.DBKeyTodoDemo}:${this.currentUserId}`);
+    return this.localStorage.getDataObject<Todo[]>(`${BonusesComponent.DBKeyBonuses}:${this.currentUserId}`);
   }
 
   saveToDisk() {
     if (this.isDataLoaded) {
-      this.localStorage.saveSyncedSessionData(this.rowsCache, `${TodoDemoComponent.DBKeyTodoDemo}:${this.currentUserId}`);
+      this.localStorage.saveSyncedSessionData(this.rowsCache, `${BonusesComponent.DBKeyBonuses}:${this.currentUserId}`);
     }
   }
 }

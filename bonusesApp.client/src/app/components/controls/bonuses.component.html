@@ -1,19 +1,19 @@
 <div class="row control-box">
   <div class="col-lg-8">
     <div class="search-box">
-      <app-search-box (searchChange)="onSearchChanged($event)" placeholder="{{'todoDemo.management.Search' | translate}}" />
+      <app-search-box (searchChange)="onSearchChanged($event)" placeholder="{{'bonuses.management.Search' | translate}}" />
     </div>
   </div>
   <div class="col-lg-4">
     <ul class="nav flex-row">
       <li [class.active]="hideCompletedTasks" class="nav-item toolbaritem">
         <a class="nav-link" href="javascript:;" (click)="hideCompletedTasks = !hideCompletedTasks">
-          <i class="fa fa-eye-slash"></i> {{'todoDemo.management.HideCompleted' | translate}}
+          <i class="fa fa-eye-slash"></i> {{'bonuses.management.HideCompleted' | translate}}
         </a>
       </li>
       <li class="nav-item toolbaritem">
         <a class="nav-link" href="javascript:;" (click)="addTask()">
-          <i class="fa fa-plus"></i> {{'todoDemo.management.AddTask' | translate}}
+          <i class="fa fa-plus"></i> {{'bonuses.management.AddTask' | translate}}
         </a>
       </li>
     </ul>
@@ -71,11 +71,11 @@
 </ng-template>
 
 <ng-template #actionsTemplate let-row="row">
-  <a class="btn btn-link btn-sm" href="javascript:;" ngbTooltip="{{'todoDemo.management.Delete' | translate}}"
+  <a class="btn btn-link btn-sm" href="javascript:;" ngbTooltip="{{'bonuses.management.Delete' | translate}}"
      container="body" (click)="delete(row)">
     <i class="fa fa-times"></i>
   </a>
-  <a class="btn btn-link btn-sm" href="javascript:;" ngbTooltip="{{'todoDemo.management.Important' | translate}}"
+  <a class="btn btn-link btn-sm" href="javascript:;" ngbTooltip="{{'bonuses.management.Important' | translate}}"
      container="body" (click)="row.important = !row.important">
     <i [ngClass]="row.important ? 'fa fa-bookmark' : 'fa fa-bookmark-o'"></i>
   </a>
@@ -84,7 +84,7 @@
 
 <ng-template #editorModal let-modal>
   <div class="modal-header">
-    <h5 class="modal-title"><i class="fa fa-tasks"></i> {{'todoDemo.editor.NewTask' | translate}}</h5>
+    <h5 class="modal-title"><i class="fa fa-tasks"></i> {{'bonuses.editor.NewTask' | translate}}</h5>
     <button type="button" class="btn-close fs-sm" title="Close" (click)="modal.close()" tabindex="-1"></button>
   </div>
   <div class="modal-body">
@@ -92,20 +92,20 @@
       <form name="taskEditorForm" #f="ngForm" novalidate (ngSubmit)="f.form.valid ? save() && modal.close() :
                         (!taskName.valid && showErrorAlert('Task name is required', 'Please enter a name for the task'));">
         <div class="mb-3 row">
-          <label class="col-form-label col-md-3" for="taskName">{{'todoDemo.editor.Name' | translate}}:</label>
+          <label class="col-form-label col-md-3" for="taskName">{{'bonuses.editor.Name' | translate}}:</label>
           <div class="col-md-9">
             <input appAutofocus type="text" id="taskName" name="taskName" placeholder="Enter task name" class="form-control"
                    [ngClass]="{'is-valid': f.submitted && taskName.valid, 'is-invalid' : f.submitted && !taskName.valid}"
                    [(ngModel)]="taskEdit.name" #taskName="ngModel" required />
             @if (f.submitted && !taskName.valid) {
               <span class="invalid-feedback">
-                {{'todoDemo.editor.TaskNameRequired' | translate}}
+                {{'bonuses.editor.TaskNameRequired' | translate}}
               </span>
             }
           </div>
         </div>
         <div class="mb-3 row description-form-group">
-          <label class="col-form-label col-md-3" for="taskDescription">{{'todoDemo.editor.Description' | translate}}:</label>
+          <label class="col-form-label col-md-3" for="taskDescription">{{'bonuses.editor.Description' | translate}}:</label>
           <div class="col-md-9">
             <input type="text" id="taskDescription" name="taskDescription" placeholder="Enter task description"
                    class="form-control" [(ngModel)]="taskEdit.description" />
@@ -115,7 +115,7 @@
           <div class="offset-md-3 col-md-9">
             <div class="form-check">
               <input class="form-check-input" id="isImportant" name="isImportant" type="checkbox" [(ngModel)]="taskEdit.important">
-              <label for="isImportant" class="form-check-label">{{'todoDemo.editor.Important' | translate}}</label>
+              <label for="isImportant" class="form-check-label">{{'bonuses.editor.Important' | translate}}</label>
             </div>
           </div>
         </div>
@@ -125,7 +125,7 @@
           </div>
         </div>
         <div class="float-end">
-          <button type="submit" class="btn btn-primary">{{'todoDemo.editor.AddTask' | translate}}</button>
+          <button type="submit" class="btn btn-primary">{{'bonuses.editor.AddTask' | translate}}</button>
         </div>
         <div class="clearfix"></div>
       </form>

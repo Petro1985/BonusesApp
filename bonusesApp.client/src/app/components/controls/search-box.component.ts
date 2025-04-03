@@ -1,17 +1,12 @@
-// ---------------------------------------
-// Email: quickapp@ebenmonney.com
-// Templates: www.ebenmonney.com/templates
-// (c) 2024 www.ebenmonney.com/mit-license
-// ---------------------------------------
-
 import { Component, ElementRef, HostListener, input, output, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-search-box',
-  templateUrl: './search-box.component.html',
-  styleUrl: './search-box.component.scss',
-  imports: [FormsModule]
+    selector: 'app-search-box',
+    templateUrl: './search-box.component.html',
+    styleUrl: './search-box.component.scss',
+    standalone: true,
+    imports: [FormsModule]
 })
 export class SearchBoxComponent {
   readonly placeholder = input('Search...');
@@ -21,7 +16,7 @@ export class SearchBoxComponent {
   readonly searchInput = viewChild.required<ElementRef>('searchInput');
 
   onValueChange(value: string) {
-    setTimeout(() => this.searchChange.emit(value));
+    setTimeout(() => this.searchChange.emit(value), 1000);
   }
 
   @HostListener('keydown.escape')
