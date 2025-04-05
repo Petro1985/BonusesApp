@@ -47,4 +47,16 @@ public class BonusService(ApplicationDbContext appContext) : IBonusService
         appContext.Bonuses.Add(newBonuses);
         await appContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task GiveBonusesAsync(int id, CancellationToken cancellationToken)
+    {
+        var bonuses = await appContext.Bonuses
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (bonuses == null) return;
+
+        bonuses.CurrentCount -= bonuses.Setting;
+        appContext.Update(bonuses);
+        await appContext.SaveChangesAsync(cancellationToken);
+    }
 }

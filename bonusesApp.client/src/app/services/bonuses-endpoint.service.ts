@@ -14,6 +14,7 @@ export class BonusesEndpoint extends EndpointBase {
   private http = inject(HttpClient);
   private configurations = inject(ConfigurationService);
   get bonusesUrl() { return this.configurations.baseUrl + '/api/bonuses'; }
+  get giveBonusUrl() { return this.configurations.baseUrl + '/api/bonuses/{0}/giveBonus'; }
 
   getBonuses(offset: number, limit: number, search: string): Observable<BonusesResponse> {
 
@@ -52,6 +53,15 @@ export class BonusesEndpoint extends EndpointBase {
     return this.http.patch<void>(url, content , this.requestHeaders).pipe(
       catchError(error => {
         return this.handleError<void>(error, () => this.updateBonuses(bonuses));
+      }));
+  }
+
+  giveBonus(id: number): Observable<void> {
+    const url = this.giveBonusUrl.replace("{0}", id.toString());
+
+    return this.http.post<void>(url, null, this.requestHeaders).pipe(
+      catchError(error => {
+        return this.handleError<void>(error, () => this.giveBonus(id));
       }));
   }
 }

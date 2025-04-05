@@ -153,8 +153,8 @@ export class BonusesComponent implements OnInit {
       },
       {
         prop: '',
-        name: '',
-        width: 80,
+        name: this.gT('bonuses.management.GiveBonus'),
+        width: 150,
         cellTemplate: this.giveBonusTemplate(),
         resizeable: false,
         canAutoResize: false,
@@ -256,6 +256,7 @@ export class BonusesComponent implements OnInit {
 
   addCount(row: Bonuses) {
     row.currentCounter++;
+    row.totalCounter++;
 
     this.updateBonusEntry(row);
   }
@@ -274,8 +275,19 @@ export class BonusesComponent implements OnInit {
     }, this.TimeOut));
   }
 
-  giveBonuses(row: Bonuses) {
+  giveBonus(row: Bonuses) {
+    const formattedMessage = this.gT('bonuses.management.GiveBonusQuestion');
+    const message = formattedMessage.replace("{0}", row.name).replace("{1}", row.phoneNumber);
 
-    this.updateBonusEntry(row);
+    this.alertService.showDialog(message, DialogType.confirm, () => this.giveBonusHelper(row));
+  }
+
+  private giveBonusHelper(row: Bonuses) {
+    row.currentCounter -= row.setting;
+    this.bonusesService.giveBonus(row.id)
+      .subscribe(() =>
+      {
+        this.getBonuses();
+      });
   }
 }

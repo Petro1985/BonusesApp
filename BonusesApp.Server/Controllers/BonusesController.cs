@@ -59,6 +59,23 @@ public class BonusesController : BaseApiController
         return NoContent();
     }
 
+    
+    /// <summary>
+    /// Удаление бонусов клиента
+    /// </summary>
+    /// <param name="id">Идентификатор записи</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("{id:int}/giveBonus")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GiveBonus(int id, CancellationToken cancellationToken)
+    {
+        await _bonusService.GiveBonusesAsync(id, cancellationToken);
+        return NoContent();
+    }
+
     /// <summary>
     /// Удаление бонусов клиента
     /// </summary>

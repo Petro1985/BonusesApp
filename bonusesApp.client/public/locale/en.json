@@ -37,7 +37,7 @@
     "Orders": "Orders",
     "NotFound": "Not-Found",
     "About": "About",
-    "Setting": "Setting"
+    "Settings": "Settings"
   },
   "login": {
     "Login": "Login",
@@ -369,13 +369,20 @@
       "Name": "Client name",
       "TotalCounter": "TotalCounter",
       "CurrentCounter": "CurrentCounter",
+      "AddCount": "Add counter",
       "Setting": "Setting",
       "Search": "Search for phone number...",
       "HideCompleted": "Hide Completed",
-      "Delete": "Delete task",
       "Important": "Mark as important",
       "Description": "Description",
-      "DeleteQuestion": "Are you sure you want to delete the client?"
+      "GiveBonus": "Give bonus",
+      "BonusNotAllow": "Bonus not allowed yet",
+      "DoubleClickToEdit": "Double click to edit",
+      "EditSetting": "Edit setting",
+      "EditName": "Edit name",
+      "Delete": "Delete client",
+      "DeleteQuestion": "Are you sure you want to delete the client?",
+      "GiveBonusQuestion": "Are you sure you want to give bonus to the client \"{0}\" (phone {1})?"
     },
     "editor": {
       "PhoneNumber": "PhoneNumber",

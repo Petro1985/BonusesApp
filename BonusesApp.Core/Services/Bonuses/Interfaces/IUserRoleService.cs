@@ -37,4 +37,12 @@ public interface IBonusService
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task AddBonusesAsync(BonusesEntity newBonuses, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Выдача бонуса клиенту
+    /// </summary>
+    /// <param name="id">Идентификатор записи по бонусам</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task GiveBonusesAsync(int id, CancellationToken cancellationToken);
 }

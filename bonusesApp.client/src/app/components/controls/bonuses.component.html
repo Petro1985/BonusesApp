@@ -44,7 +44,11 @@
            (keydown.escape)="editing[row.$$index + '-name'] = false"/>
   }
   @else {
-    <span class="inline-label" [class.completed]="row.completed" attr.title="Double click to edit - {{value}}"
+    <a class="me-2" href="javascript:;" ngbTooltip="{{'bonuses.management.EditName' | translate}}"
+       container="body" (click)="editing[row.$$index + '-name'] = true">
+      <i class="fa fa-pencil"></i>
+    </a>
+    <span class="inline-label" [class.completed]="row.completed" attr.title="{{'bonuses.management.DoubleClickToEdit' | translate}}"
           (dblclick)="editing[row.$$index + '-name'] = true">
       {{value}}
     </span>
@@ -65,11 +69,16 @@
            (keydown.escape)="editing[row.$$index + '-setting'] = false"/>
   }
   @else {
-    <span class="inline-label" attr.title="Double click to edit - {{value}}"
+    <span class="inline-label cell-with-icon" attr.title="{{'bonuses.management.DoubleClickToEdit' | translate}}"
           (dblclick)="editing[row.$$index + '-setting'] = true">
       {{value}}
     </span>
+    <a class="" href="javascript:;" ngbTooltip="{{'bonuses.management.EditSetting' | translate}}"
+       container="body" (click)="editing[row.$$index + '-setting'] = true">
+      <i class="fa fa-pencil"></i>
+    </a>
   }
+
 </ng-template>
 
 <ng-template #deleteTemplate let-row="row">
@@ -80,8 +89,9 @@
 </ng-template>
 
 <ng-template #giveBonusTemplate let-row="row">
-  <a class="btn btn-sm w-100" [class.btn-success] ="row.currentCounter >= row.setting" href="javascript:;" ngbTooltip="{{'bonuses.management.GiveBonuses' | translate}}"
-     container="body" (click)="giveBonuses(row)">
+  <a class="btn btn-sm w-100" [class.btn-success] ="row.currentCounter >= row.setting" href="javascript:;"
+     ngbTooltip="{{ (row.currentCounter >= row.setting ? 'bonuses.management.GiveBonus' : 'bonuses.management.BonusNotAllow') | translate}}"
+     container="body" (click)="row.currentCounter >= row.setting && giveBonus(row)">
     <i class="fa"
        [class.fa-check]="row.currentCounter >= row.setting"
        [class.fa-times]="row.currentCounter < row.setting"
@@ -90,7 +100,7 @@
 </ng-template>
 
 <ng-template #currentCountTemplate let-row="row" let-value="value">
-  <span class="inline-label current-counter-cell" > {{value}} </span>
+  <span class="inline-label cell-with-icon" > {{value}} </span>
   <a class="" href="javascript:;" ngbTooltip="{{'bonuses.management.AddCount' | translate}}"
      container="body" (click)="addCount(row)">
     <i class="fa fa-plus"></i>
