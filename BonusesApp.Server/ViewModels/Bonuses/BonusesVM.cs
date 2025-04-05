@@ -1,5 +1,11 @@
 namespace BonusesApp.Server.ViewModels.Bonuses;
 
+
+public class BonusesResponse
+{
+    public int TotalCount { get; set; }
+    public List<BonusesVM> Bonuses { get; set; }
+}
 public class BonusesVM
 {
     public int Id { get; set; }

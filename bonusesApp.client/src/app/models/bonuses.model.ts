@@ -1,3 +1,7 @@
+export interface BonusesResponse {
+  bonuses: Bonuses[],
+  totalCount:number,
+}
 export interface Bonuses {
   id: number;
   phoneNumber: string;

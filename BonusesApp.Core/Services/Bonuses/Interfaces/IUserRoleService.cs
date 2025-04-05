@@ -8,11 +8,11 @@ public interface IBonusService
     /// Получение бонусов клиентов
     /// </summary>
     /// <param name="offset"></param>
-    /// <param name="limit"></param>
+    /// <param name="pageSize"></param>
     /// <param name="search"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<List<BonusesEntity>> GetBonusesAsync(int offset = 0, int limit = 0, string? search = null, CancellationToken cancellationToken = default);
+    Task<(List<BonusesEntity>, int TotalCount)> GetBonusesAsync(int offset = 0, int pageSize = 0, string? search = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Добавление нового клиента

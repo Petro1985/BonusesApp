@@ -25,7 +25,15 @@
                [columns]="columns"
                [scrollbarV]="verticalScrollbar()"
                [summaryRow]="false"
-               [columnMode]="'force'">
+               [columnMode]="'force'"
+               [count]="totalCount"
+               [offset]="offset"
+               [limit]="limit"
+               [externalPaging]="true"
+               (page)="onPage($event)"
+
+>
+
 </ngx-datatable>
 
 <ng-template #statusHeaderTemplate>

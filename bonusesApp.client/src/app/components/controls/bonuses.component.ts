@@ -59,6 +59,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
 
   offset: number = 0;
   limit: number = 10;
+  totalCount: number = 0;
 
   get currentUserId() {
     if (this.authService.currentUser) {
@@ -226,11 +227,19 @@ export class BonusesComponent implements OnInit, OnDestroy {
     this.bonusesService.getBonuses(this.offset, this.limit, this.searchString)
       .subscribe(data =>
       {
-        this.refreshDataIndexes(data)
-        this.rows = data;
-        this.rowsCache = [...data];
+        this.totalCount = data.totalCount;
+        this.refreshDataIndexes(data.bonuses)
+        this.rows = data.bonuses;
+        this.rowsCache = [...data.bonuses];
         this.isDataLoaded = true;
         setTimeout(() => { this.loadingIndicator = false; }, 1500);
       });
+  }
+
+  onPage($event: any) {
+    this.offset = $event.offset;
+    this.totalCount = $event.offset;
+    this.limit = $event.pageSize;
+    this.getBonuses();
   }
 }

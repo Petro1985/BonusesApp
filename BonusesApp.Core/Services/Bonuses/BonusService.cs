@@ -7,7 +7,7 @@ namespace BonusesApp.Core.Services.Bonuses;
 
 public class BonusService(ApplicationDbContext appContext) : IBonusService
 {
-    public async Task<List<BonusesEntity>> GetBonusesAsync(int offset = 0, int limit = 0, string? search = null, CancellationToken cancellationToken = default)
+    public async Task<(List<BonusesEntity>, int TotalCount)> GetBonusesAsync(int offset = 0, int pageSize = 0, string? search = null, CancellationToken cancellationToken = default)
     {
         IQueryable<BonusesEntity> query = appContext.Bonuses; 
         if (!string.IsNullOrWhiteSpace(search))
@@ -15,12 +15,14 @@ public class BonusService(ApplicationDbContext appContext) : IBonusService
             query = query.Where(x => EF.Functions.Like(x.PhoneNumber, $"%{search}%"));
         }
         
+        var totalCount = await query.CountAsync(cancellationToken);
+        
         var bonuses = await query
-            .Skip(offset)
-            .Take(limit)
+            .Skip(offset * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
         
-        return bonuses;
+        return (bonuses, totalCount);
     }
 
     public async Task AddBonusesAsync(BonusesEntity newBonuses, CancellationToken cancellationToken = default)

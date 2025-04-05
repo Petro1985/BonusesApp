@@ -23,18 +23,23 @@ public class BonusesController : BaseApiController
     /// Получение бонусов клиентов
     /// </summary>
     /// <param name="offset"></param>
-    /// <param name="limit"></param>
+    /// <param name="pageSize"></param>
     /// <param name="search"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(BonusesVM))]
+    [ProducesResponseType(200, Type = typeof(BonusesResponse))]
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetBonuses([FromQuery] int offset, [FromQuery] int limit, [FromQuery]string? search, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetBonuses([FromQuery] int offset, [FromQuery] int pageSize, [FromQuery]string? search, CancellationToken cancellationToken)
     {
-        var bonuses = await _bonusService.GetBonusesAsync(offset, limit, search, cancellationToken);
-        var response = Mapper.Map<List<BonusesVM>>(bonuses);
+        var (bonuses, totalCount) = await _bonusService.GetBonusesAsync(offset, pageSize, search, cancellationToken);
+        var responseBonuses = Mapper.Map<List<BonusesVM>>(bonuses);
+        var response = new BonusesResponse
+        {
+            Bonuses = responseBonuses,
+            TotalCount = totalCount,
+        };
         return Ok(response);
     }
 
