@@ -87,7 +87,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadingIndicator = true;
 
-    this.getBonuses(this.offset, this.limit, this.searchString)
+    this.getBonuses()
 
     const gT = (key: string) => this.translationService.getTranslation(key);
 
@@ -158,8 +158,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
 
   onSearchChanged(value: string) {
     this.searchString = value;
-    this.rows = this.rowsCache.filter(r =>
-      Utilities.searchArray(value, false, r.phoneNumber));
+    this.getBonuses();
   }
 
   showErrorAlert(caption: string, message: string) {
@@ -180,7 +179,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
   save() {
     this.bonusesService.saveBonuses(this.bonusEdit as Bonuses)
       .subscribe(() => {
-        this.getBonuses(this.offset, this.limit, this.searchString);
+        this.getBonuses();
       })
 
     return true;
@@ -223,8 +222,8 @@ export class BonusesComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getBonuses(offset: number, limit: number, search: string) {
-    this.bonusesService.getBonuses(this.offset, this.limit, search)
+  private getBonuses() {
+    this.bonusesService.getBonuses(this.offset, this.limit, this.searchString)
       .subscribe(data =>
       {
         this.refreshDataIndexes(data)

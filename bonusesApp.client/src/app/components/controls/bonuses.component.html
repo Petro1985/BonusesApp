@@ -8,11 +8,6 @@
   </div>
   <div class="col-lg-4">
     <ul class="nav flex-row">
-<!--      <li [class.active]="hideCompletedTasks" class="nav-item toolbaritem">-->
-<!--        <a class="nav-link" href="javascript:;" (click)="hideCompletedTasks = !hideCompletedTasks">-->
-<!--          <i class="fa fa-eye-slash"></i> {{'bonuses.management.HideCompleted' | translate}}-->
-<!--        </a>-->
-<!--      </li>-->
       <li class="nav-item toolbaritem">
         <a class="nav-link" href="javascript:;" (click)="addClient()">
           <i class="fa fa-plus"></i> {{'bonuses.management.AddClient' | translate}}
@@ -29,6 +24,7 @@
                [footerHeight]="35"
                [columns]="columns"
                [scrollbarV]="verticalScrollbar()"
+               [summaryRow]="false"
                [columnMode]="'force'">
 </ngx-datatable>
 

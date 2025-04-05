@@ -12,9 +12,17 @@ export class SearchBoxComponent {
   public placeholder = input('Search...');
   readonly searchChange = output<string>();
   readonly searchInput = viewChild.required<ElementRef>('searchInput');
+  private debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
   onValueChange(value: string) {
-    setTimeout(() => this.searchChange.emit(value), 1000);
+    if (this.debounceTimeout) {
+      clearTimeout(this.debounceTimeout);
+    }
+
+    this.debounceTimeout = setTimeout(() => {
+      this.searchChange.emit(value);
+      this.debounceTimeout = null;
+    }, 1000);
   }
 
   @HostListener('keydown.escape')
