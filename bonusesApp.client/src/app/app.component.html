@@ -19,27 +19,6 @@
               <i class="fa fa-home"></i>
             </a>
           </li>
-          @if (canViewCustomers) {
-          <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/customers" (click)="isMenuCollapsed = true">
-              {{'mainMenu.Customers' | translate}}
-            </a>
-          </li>
-          }
-          @if (canViewProducts) {
-          <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/products" (click)="isMenuCollapsed = true">
-              {{'mainMenu.Products' | translate}}
-            </a>
-          </li>
-          }
-          @if (canViewOrders) {
-          <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/orders" (click)="isMenuCollapsed = true">
-              {{'mainMenu.Orders' | translate}}
-            </a>
-          </li>
-          }
           <li class="nav-item" routerLinkActive="active">
             <a class="nav-link" routerLink="/about" (click)="isMenuCollapsed = true">
               {{'mainMenu.About' | translate}}
@@ -95,33 +74,8 @@
     </div>
   </nav>
 
-  @if (!isAppLoaded) {
-  <div id="pre-bootstrap" class="prebootStep prebootShow">
-    <div class="messaging">
-      <h1>
-        Loaded!
-      </h1>
-      <p>
-        QUICK APPLICATION SYSTEM - <span style="font-style:italic">quick</span>App &copy;
-        <a class="text-link" href="https://www.ebenmonney.com">WWW.EBENMONNEY.COM</a>
-      </p>
-    </div>
-  </div>
-  }
-
   <main class="container-xl px-3 px-md-4 px-xxl-5">
     <router-outlet></router-outlet>
     <div class="footer-height"></div>
   </main>
-
-  <footer class="footer fixed-bottom">
-    <div class="container">
-      <p class="text-center text-muted">
-        <span style="font-style:italic">quick</span>App &copy; {{getYear()}}
-        <a class="text-link" href="https://www.ebenmonney.com" target="_blank">www.ebenmonney.com</a>
-        <!--<span class="small display-none">- Powered by <a href="https://www.ebenmonney.com/quickapp"
-        target="_blank"><span style="font-style:italic">quick</span>App</a></span>-->
-      </p>
-    </div>
-  </footer>
 </div>

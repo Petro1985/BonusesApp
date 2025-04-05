@@ -1,9 +1,3 @@
-// ---------------------------------------
-// Email: quickapp@ebenmonney.com
-// Templates: www.ebenmonney.com/templates
-// (c) 2024 www.ebenmonney.com/mit-license
-// ---------------------------------------
-
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
@@ -15,27 +9,11 @@ export class NotificationEndpoint {
   private demoNotifications = [
     {
       id: 1,
-      header: '20 New Products were added to your inventory by "administrator"',
-      body: '20 new "BMW M6" were added to your stock by "administrator" on 5/28/2017 4:54:13 PM',
+      header: '',
+      body: '',
       isRead: true,
       isPinned: true,
-      date: '2017-05-28T16:29:13.5877958'
-    },
-    {
-      id: 2,
-      header: '1 Product running low',
-      body: 'You are running low on "Nissan Patrol". 2 Items remaining',
-      isRead: false,
-      isPinned: false,
-      date: '2017-05-28T19:54:42.4144502'
-    },
-    {
-      id: 3,
-      header: 'Tomorrow is half day',
-      body: 'Guys, tomorrow we close by midday. Please check in your sales before noon. Thanks. Alex.',
-      isRead: false,
-      isPinned: false,
-      date: '2017-05-30T11:13:42.4144502'
+      date: ''
     }
   ];
 
