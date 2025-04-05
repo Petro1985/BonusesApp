@@ -55,6 +55,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
   loadingIndicator = true;
   formResetToggle = true;
   private _currentUserId: string | undefined;
+  private searchString: string = '';
 
   offset: number = 0;
   limit: number = 10;
@@ -86,15 +87,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadingIndicator = true;
 
-    this.bonusesService.getBonuses(this.offset, this.limit, "")
-      .subscribe(data =>
-      {
-        this.refreshDataIndexes(data)
-        this.rows = data;
-        this.rowsCache = [...data];
-        this.isDataLoaded = true;
-        setTimeout(() => { this.loadingIndicator = false; }, 1500);
-      });
+    this.getBonuses(this.offset, this.limit, this.searchString)
 
     const gT = (key: string) => this.translationService.getTranslation(key);
 
@@ -155,7 +148,6 @@ export class BonusesComponent implements OnInit, OnDestroy {
     this.saveToDisk();
   }
 
-
   refreshDataIndexes(data: Bonuses[]) {
     let index = 0;
 
@@ -165,6 +157,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
   }
 
   onSearchChanged(value: string) {
+    this.searchString = value;
     this.rows = this.rowsCache.filter(r =>
       Utilities.searchArray(value, false, r.phoneNumber));
   }
@@ -185,12 +178,11 @@ export class BonusesComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.rowsCache.splice(0, 0, this.bonusEdit as Bonuses);
-    this.rows.splice(0, 0, this.bonusEdit as Bonuses);
-    this.refreshDataIndexes(this.rowsCache);
-    this.rows = [...this.rows];
+    this.bonusesService.saveBonuses(this.bonusEdit as Bonuses)
+      .subscribe(() => {
+        this.getBonuses(this.offset, this.limit, this.searchString);
+      })
 
-    this.saveToDisk();
     return true;
   }
 
@@ -229,5 +221,17 @@ export class BonusesComponent implements OnInit, OnDestroy {
     if (this.isDataLoaded) {
       this.localStorage.saveSyncedSessionData(this.rowsCache, `${BonusesComponent.DBKeyBonuses}:${this.currentUserId}`);
     }
+  }
+
+  private getBonuses(offset: number, limit: number, search: string) {
+    this.bonusesService.getBonuses(this.offset, this.limit, search)
+      .subscribe(data =>
+      {
+        this.refreshDataIndexes(data)
+        this.rows = data;
+        this.rowsCache = [...data];
+        this.isDataLoaded = true;
+        setTimeout(() => { this.loadingIndicator = false; }, 1500);
+      });
   }
 }

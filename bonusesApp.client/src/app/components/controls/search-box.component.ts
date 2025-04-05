@@ -10,9 +10,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class SearchBoxComponent {
   public placeholder = input('Search...');
-
   readonly searchChange = output<string>();
-
   readonly searchInput = viewChild.required<ElementRef>('searchInput');
 
   onValueChange(value: string) {

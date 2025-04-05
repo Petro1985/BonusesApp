@@ -1,7 +1,9 @@
 <div class="row control-box">
   <div class="col-lg-8">
     <div class="search-box">
-      <app-search-box (searchChange)="onSearchChanged($event)" placeholder="{{'bonuses.management.Search' | translate}}" />
+      <app-search-box
+        (searchChange)="onSearchChanged($event)"
+        placeholder="{{'bonuses.management.Search' | translate}}" />
     </div>
   </div>
   <div class="col-lg-4">
@@ -131,7 +133,7 @@
         <div class="mb-3 row">
           <label class="col-form-label col-md-5" for="bonusTotalCounter">{{'bonuses.editor.TotalCounter' | translate}}:</label>
           <div class="col-md-7">
-            <input type="text" id="bonusTotalCounter" name="bonusTotalCounter" placeholder="Enter total count"
+            <input type="number" id="bonusTotalCounter" name="bonusTotalCounter" placeholder="Enter total count"
                    class="form-control" [(ngModel)]="bonusEdit.totalCounter" />
           </div>
         </div>
@@ -139,7 +141,7 @@
         <div class="mb-3 row">
           <label class="col-form-label col-md-5" for="bonusCurrentCounter">{{'bonuses.editor.CurrentCounter' | translate}}:</label>
           <div class="col-md-7">
-            <input type="text" id="bonusCurrentCounter" name="bonusCurrentCounter" placeholder="Enter current count"
+            <input type="number" id="bonusCurrentCounter" name="bonusCurrentCounter" placeholder="Enter current count"
                    class="form-control" [(ngModel)]="bonusEdit.currentCounter" />
           </div>
         </div>
@@ -147,7 +149,7 @@
         <div class="mb-3 row">
           <label class="col-form-label col-md-5" for="bonusSetting">{{'bonuses.editor.Setting' | translate}}:</label>
           <div class="col-md-7">
-            <input type="text" id="bonusSetting" name="bonusSetting" placeholder="Enter bonus setting" class="form-control"
+            <input type="number" id="bonusSetting" name="bonusSetting" placeholder="Enter bonus setting" class="form-control"
                    [ngClass]="{'is-valid': f.submitted && bonusSetting.valid, 'is-invalid' : f.submitted && !bonusSetting.valid}"
                    [(ngModel)]="bonusEdit.setting"
                    #bonusSetting="ngModel" required/>

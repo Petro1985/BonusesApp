@@ -24,4 +24,15 @@ export class BonusesEndpoint extends EndpointBase {
         return this.handleError<Bonuses[]>(error, () => this.getBonuses(offset, limit, search));
       }));
   }
+
+  saveBonuses(bonuses: Bonuses): Observable<Bonuses[]> {
+
+    const url = this.bonusesUrl;
+    const content = JSON.stringify(bonuses);
+
+    return this.http.post<Bonuses[]>(url, content, this.requestHeaders).pipe(
+      catchError(error => {
+        return this.handleError<Bonuses[]>(error, () => this.saveBonuses(bonuses));
+      }));
+  }
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using BonusesApp.Core.Models.Bonuses;
 using BonusesApp.Core.Services.Bonuses.Interfaces;
 using BonusesApp.Server.ViewModels.Bonuses;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,6 @@ public class BonusesController : BaseApiController
         _bonusService = bonusService;
     }
 
-
     /// <summary>
     /// Получение бонусов клиентов
     /// </summary>
@@ -37,6 +37,32 @@ public class BonusesController : BaseApiController
         var response = Mapper.Map<List<BonusesVM>>(bonuses);
         return Ok(response);
     }
-    
+
+
+    /// <summary>
+    /// Добавление новой записи о бонусах клиента
+    /// </summary>
+    /// <param name="request">Информация по добавляемым бонусам</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> AddBonuses(AddBonusesRequest request, CancellationToken cancellationToken)
+    {
+        PrepareRequest(request);        
+        var newBonuses = Mapper.Map<BonusesEntity>(request);
+        await _bonusService.AddBonusesAsync(newBonuses, cancellationToken);
+        return NoContent();
+    }
+
+    private void PrepareRequest(AddBonusesRequest request)
+    {
+        if (!request.PhoneNumber.StartsWith("+7"))
+        {
+            request.PhoneNumber = "+7" + request.PhoneNumber;
+        }
+    }
 }
  

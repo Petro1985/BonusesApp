@@ -52,5 +52,13 @@ public class MappingProfile : Profile
             .ForMember(x => x.CurrentCounter, map => map.MapFrom(s => s.CurrentCount))
             .ForMember(x => x.Setting, map => map.MapFrom(s => s.Setting))
             .ReverseMap();
+
+        CreateMap<AddBonusesRequest, BonusesEntity>()
+            .ForMember(x => x.PhoneNumber, map => map.MapFrom(s => s.PhoneNumber))
+            .ForMember(x => x.Setting, map => map.MapFrom(s => s.Setting))
+            .ForMember(x => x.CurrentCount, map => map.MapFrom(s => s.CurrentCounter))
+            .ForMember(x => x.TotalCount, map => map.MapFrom(s => s.TotalCounter))
+            .ForMember(x => x.Id, map => map.Ignore())
+            .ForMember(x => x.Name, map => map.MapFrom(x => x.Name));
     }
 }

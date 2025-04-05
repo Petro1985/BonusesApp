@@ -22,4 +22,10 @@ public class BonusService(ApplicationDbContext appContext) : IBonusService
         
         return bonuses;
     }
+
+    public async Task AddBonusesAsync(BonusesEntity newBonuses, CancellationToken cancellationToken = default)
+    {
+        appContext.Bonuses.Add(newBonuses);
+        await appContext.SaveChangesAsync(cancellationToken);
+    }
 }
