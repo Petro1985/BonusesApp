@@ -36,16 +36,6 @@
 
 </ngx-datatable>
 
-<ng-template #statusHeaderTemplate>
-  <i class="fa fa-check-square-o"></i>
-</ng-template>
-
-<ng-template #statusTemplate let-row="row" let-value="value">
-  <div class="form-check">
-    <input class="form-check-input" attr.name="checkboxes-{{value}}" type="checkbox" [(ngModel)]="row.completed">
-  </div>
-</ng-template>
-
 <ng-template #nameTemplate let-row="row" let-value="value">
   @if (editing[row.$$index + '-name']) {
     <input class="inline-editor" appAutofocus type="text" [value]="value"
@@ -62,7 +52,7 @@
 </ng-template>
 
 <ng-template #readOnlyTemplate let-row="row" let-value="value">
-  <span class="inline-label" [class.completed]="row.completed">
+  <span class="inline-label">
     {{value}}
   </span>
 </ng-template>
@@ -75,21 +65,35 @@
            (keydown.escape)="editing[row.$$index + '-setting'] = false"/>
   }
   @else {
-    <span class="inline-label" [class.completed]="row.completed" attr.title="Double click to edit - {{value}}"
-          (dblclick)="editing[row.$$index + '-description'] = true">
+    <span class="inline-label" attr.title="Double click to edit - {{value}}"
+          (dblclick)="editing[row.$$index + '-setting'] = true">
       {{value}}
     </span>
   }
 </ng-template>
 
-<ng-template #actionsTemplate let-row="row">
+<ng-template #deleteTemplate let-row="row">
   <a class="btn btn-link btn-sm" href="javascript:;" ngbTooltip="{{'bonuses.management.Delete' | translate}}"
      container="body" (click)="delete(row)">
-    <i class="fa fa-times"></i>
+    <i class="fa fa-trash"></i>
   </a>
-  <a class="btn btn-link btn-sm" href="javascript:;" ngbTooltip="{{'bonuses.management.Important' | translate}}"
-     container="body" (click)="row.important = !row.important">
-    <i [ngClass]="row.important ? 'fa fa-bookmark' : 'fa fa-bookmark-o'"></i>
+</ng-template>
+
+<ng-template #giveBonusTemplate let-row="row">
+  <a class="btn btn-sm w-100" [class.btn-success] ="row.currentCounter >= row.setting" href="javascript:;" ngbTooltip="{{'bonuses.management.GiveBonuses' | translate}}"
+     container="body" (click)="giveBonuses(row)">
+    <i class="fa"
+       [class.fa-check]="row.currentCounter >= row.setting"
+       [class.fa-times]="row.currentCounter < row.setting"
+    ></i>
+  </a>
+</ng-template>
+
+<ng-template #currentCountTemplate let-row="row" let-value="value">
+  <span class="inline-label current-counter-cell" > {{value}} </span>
+  <a class="" href="javascript:;" ngbTooltip="{{'bonuses.management.AddCount' | translate}}"
+     container="body" (click)="addCount(row)">
+    <i class="fa fa-plus"></i>
   </a>
 </ng-template>
 

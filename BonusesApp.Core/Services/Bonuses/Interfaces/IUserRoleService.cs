@@ -15,6 +15,22 @@ public interface IBonusService
     Task<(List<BonusesEntity>, int TotalCount)> GetBonusesAsync(int offset = 0, int pageSize = 0, string? search = null, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Удаление бонусов клиентов
+    /// </summary>
+    /// <param name="id">Идентификатор записи</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task DeleteBonusesAsync(int id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Обновление записи бонусов клиентов
+    /// </summary>
+    /// <param name="bonuses">Измененные данные по записи</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task UpdateBonusesAsync(BonusesEntity bonuses, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Добавление нового клиента
     /// </summary>
     /// <param name="newBonuses"></param>

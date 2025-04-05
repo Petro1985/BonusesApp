@@ -8,8 +8,6 @@ import { TableColumn, NgxDatatableModule } from '@siemens/ngx-datatable';
 import { AuthService } from '../../services/auth.service';
 import { AlertService, MessageSeverity, DialogType } from '../../services/alert.service';
 import { AppTranslationService } from '../../services/app-translation.service';
-import { LocalStoreManager } from '../../services/local-store-manager.service';
-import { Utilities } from '../../services/utilities';
 import { SearchBoxComponent } from './search-box.component';
 import { AutofocusDirective } from '../../directives/autofocus.directive';
 import {Bonuses} from '../../models/bonuses.model';
@@ -35,16 +33,14 @@ interface Todo {
     AutofocusDirective, NgbTooltip, NgClass,
     TranslateModule, CommonModule, NgxMaskDirective ]
 })
-export class BonusesComponent implements OnInit, OnDestroy {
+export class BonusesComponent implements OnInit {
   private alertService = inject(AlertService);
   private translationService = inject(AppTranslationService);
-  private localStorage = inject(LocalStoreManager);
   private authService = inject(AuthService);
   private modalService = inject(NgbModal);
   private bonusesService = inject(BonusesEndpoint);
 
-// todo: вероятно не нужно
-  public static readonly DBKeyBonuses = 'bonuses.todo_list';
+  gT = (key: string) => this.translationService.getTranslation(key);
 
   columns: TableColumn[] = [];
   rows: Bonuses[] = [];
@@ -61,6 +57,10 @@ export class BonusesComponent implements OnInit, OnDestroy {
   limit: number = 10;
   totalCount: number = 0;
 
+  // защита от слишком частого обновления записи
+  private debounceTimeoutDict: Map<number, ReturnType<typeof setTimeout>> = new Map<number, ReturnType<typeof setTimeout>>();
+  private TimeOut: number = 1000;
+
   get currentUserId() {
     if (this.authService.currentUser) {
       this._currentUserId = this.authService.currentUser.id;
@@ -71,9 +71,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
 
   readonly verticalScrollbar = input(false);
 
-  // readonly statusHeaderTemplate = viewChild.required<TemplateRef<unknown>>('statusHeaderTemplate');
-  //
-  // readonly statusTemplate = viewChild.required<TemplateRef<unknown>>('statusTemplate');
+  readonly currentCountTemplate = viewChild.required<TemplateRef<unknown>>('currentCountTemplate');
 
   readonly nameTemplate = viewChild.required<TemplateRef<unknown>>('nameTemplate');
 
@@ -81,7 +79,9 @@ export class BonusesComponent implements OnInit, OnDestroy {
 
   readonly readOnlyTemplate = viewChild.required<TemplateRef<unknown>>('readOnlyTemplate');
 
-  readonly actionsTemplate = viewChild.required<TemplateRef<unknown>>('actionsTemplate');
+  readonly deleteTemplate = viewChild.required<TemplateRef<unknown>>('deleteTemplate');
+
+  readonly giveBonusTemplate = viewChild.required<TemplateRef<unknown>>('giveBonusTemplate');
 
   readonly editorModalTemplate = viewChild.required<TemplateRef<unknown>>('editorModal');
 
@@ -90,21 +90,30 @@ export class BonusesComponent implements OnInit, OnDestroy {
 
     this.getBonuses()
 
-    const gT = (key: string) => this.translationService.getTranslation(key);
-
     this.columns = [
       {
-        prop: 'phoneNumber',
-        name: gT('bonuses.management.PhoneNumber'),
-        width: 200,
+        prop: '',
+        name: '',
+        width: 30,
+        cellTemplate: this.deleteTemplate(),
         resizeable: false,
         canAutoResize: false,
         sortable: false,
         draggable: false
       },
       {
+        prop: 'phoneNumber',
+        name: this.gT('bonuses.management.PhoneNumber'),
+        width: 200,
+        resizeable: false,
+        canAutoResize: false,
+        sortable: false,
+        draggable: false,
+        cellTemplate: this.readOnlyTemplate()
+      },
+      {
         prop: 'name',
-        name: gT('bonuses.management.Name'),
+        name: this.gT('bonuses.management.Name'),
         width: 300,
         cellTemplate: this.nameTemplate(),
         resizeable: false,
@@ -114,7 +123,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
       },
       {
         prop: 'totalCounter',
-        name: gT('bonuses.management.TotalCounter'),
+        name: this.gT('bonuses.management.TotalCounter'),
         width: 160,
         resizeable: false,
         canAutoResize: false,
@@ -124,9 +133,9 @@ export class BonusesComponent implements OnInit, OnDestroy {
       },
       {
         prop: 'currentCounter',
-        name: gT('bonuses.management.CurrentCounter'),
+        name: this.gT('bonuses.management.CurrentCounter'),
         width: 160,
-        cellTemplate: this.readOnlyTemplate(),
+        cellTemplate: this.currentCountTemplate(),
         resizeable: false,
         canAutoResize: false,
         sortable: false,
@@ -134,19 +143,25 @@ export class BonusesComponent implements OnInit, OnDestroy {
       },
       {
         prop: 'setting',
-        name: gT('bonuses.management.Setting'),
+        name: this.gT('bonuses.management.Setting'),
         width: 160,
         cellTemplate: this.settingTemplate(),
         resizeable: false,
         canAutoResize: false,
         sortable: false,
         draggable: false
+      },
+      {
+        prop: '',
+        name: '',
+        width: 80,
+        cellTemplate: this.giveBonusTemplate(),
+        resizeable: false,
+        canAutoResize: false,
+        sortable: false,
+        draggable: false
       }
     ];
-  }
-
-  ngOnDestroy() {
-    this.saveToDisk();
   }
 
   refreshDataIndexes(data: Bonuses[]) {
@@ -178,7 +193,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.bonusesService.saveBonuses(this.bonusEdit as Bonuses)
+    this.bonusesService.saveNewBonuses(this.bonusEdit as Bonuses)
       .subscribe(() => {
         this.getBonuses();
       })
@@ -186,44 +201,40 @@ export class BonusesComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  updateSettingsValue(event: Event, row: Bonuses) {
+  updateSettingsValue(event: any, row: Bonuses) {
+    row.setting = event.target.value
     this.editing[row.$$index + '-setting'] = false;
-    row.setting = parseInt((event.target as HTMLInputElement).value);
-    this.rows = [...this.rows];
 
-    this.saveToDisk();
+    this.updateBonusEntry(row);
   }
 
-  updateNameValue(event: Event, row: Bonuses) {
+  updateNameValue(event: any, row: Bonuses) {
+    row.name = event.target.value
     this.editing[row.$$index + '-name'] = false;
-    row.name = (event.target as HTMLInputElement).value;
-    this.rows = [...this.rows];
 
-    this.saveToDisk();
+    this.updateBonusEntry(row);
   }
 
   delete(row: Bonuses) {
-    this.alertService.showDialog('Are you sure you want to delete the client?', DialogType.confirm, () => this.deleteHelper(row));
+    const message = this.gT('bonuses.management.DeleteQuestion')
+    this.alertService.showDialog(message, DialogType.confirm, () => this.deleteHelper(row));
   }
 
   deleteHelper(row: Bonuses) {
-    this.rowsCache = this.rowsCache.filter(item => item !== row);
-    this.rows = this.rows.filter(item => item !== row);
-
-    this.saveToDisk();
+    this.bonusesService.deleteBonuses(row)
+      .subscribe(() =>
+      {
+        this.getBonuses();
+      });
   }
 
-  getFromDisk() {
-    return this.localStorage.getDataObject<Todo[]>(`${BonusesComponent.DBKeyBonuses}:${this.currentUserId}`);
-  }
-
-  saveToDisk() {
-    if (this.isDataLoaded) {
-      this.localStorage.saveSyncedSessionData(this.rowsCache, `${BonusesComponent.DBKeyBonuses}:${this.currentUserId}`);
+  private getBonuses(withClearing: boolean = false) {
+    if (withClearing)
+    {
+      this.totalCount = 0;
+      this.rows = [];
     }
-  }
 
-  private getBonuses() {
     this.bonusesService.getBonuses(this.offset, this.limit, this.searchString)
       .subscribe(data =>
       {
@@ -240,6 +251,31 @@ export class BonusesComponent implements OnInit, OnDestroy {
     this.offset = $event.offset;
     this.totalCount = $event.offset;
     this.limit = $event.pageSize;
-    this.getBonuses();
+    this.getBonuses(true);
+  }
+
+  addCount(row: Bonuses) {
+    row.currentCounter++;
+
+    this.updateBonusEntry(row);
+  }
+
+  private updateBonusEntry(row: Bonuses, withClearing: boolean = false) {
+    if (this.debounceTimeoutDict.has(row.id)) {
+      clearTimeout(this.debounceTimeoutDict.get(row.id));
+    }
+    this.debounceTimeoutDict.set(row.id, setTimeout(() => {
+      this.bonusesService.updateBonuses(row)
+        .subscribe(() =>
+        {
+          this.getBonuses(withClearing);
+        });
+      this.debounceTimeoutDict.delete(row.id);
+    }, this.TimeOut));
+  }
+
+  giveBonuses(row: Bonuses) {
+
+    this.updateBonusEntry(row);
   }
 }

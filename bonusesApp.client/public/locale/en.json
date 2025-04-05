@@ -374,7 +374,8 @@
       "HideCompleted": "Hide Completed",
       "Delete": "Delete task",
       "Important": "Mark as important",
-      "Description": "Description"
+      "Description": "Description",
+      "DeleteQuestion": "Are you sure you want to delete the client?"
     },
     "editor": {
       "PhoneNumber": "PhoneNumber",

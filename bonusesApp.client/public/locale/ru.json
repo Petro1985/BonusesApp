@@ -372,9 +372,8 @@
       "Setting": "Настройка",
       "Search": "Поиск по номеру телефона...",
       "HideCompleted": "Hide Completed",
-      "Delete": "Delete task",
-      "Important": "Mark as important",
-      "Description": "Description"
+      "Delete": "Удалить клиента",
+      "DeleteQuestion": "Вы действительно хотите удалить клиента?"
     },
     "editor": {
       "AddClient": "Добавить клиента",

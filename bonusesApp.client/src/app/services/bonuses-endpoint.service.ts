@@ -25,14 +25,33 @@ export class BonusesEndpoint extends EndpointBase {
       }));
   }
 
-  saveBonuses(bonuses: Bonuses): Observable<Bonuses[]> {
+  saveNewBonuses(bonuses: Bonuses): Observable<Bonuses[]> {
 
     const url = this.bonusesUrl;
     const content = JSON.stringify(bonuses);
 
     return this.http.post<Bonuses[]>(url, content, this.requestHeaders).pipe(
       catchError(error => {
-        return this.handleError<Bonuses[]>(error, () => this.saveBonuses(bonuses));
+        return this.handleError<Bonuses[]>(error, () => this.saveNewBonuses(bonuses));
+      }));
+  }
+
+  deleteBonuses(bonuses: Bonuses): Observable<void> {
+    const url = `${this.bonusesUrl}/${bonuses.id}`;
+
+    return this.http.delete<void>(url, this.requestHeaders).pipe(
+      catchError(error => {
+        return this.handleError<void>(error, () => this.deleteBonuses(bonuses));
+      }));
+  }
+
+  updateBonuses(bonuses: Bonuses): Observable<void> {
+    const url = this.bonusesUrl;
+    const content = JSON.stringify(bonuses);
+
+    return this.http.patch<void>(url, content , this.requestHeaders).pipe(
+      catchError(error => {
+        return this.handleError<void>(error, () => this.updateBonuses(bonuses));
       }));
   }
 }

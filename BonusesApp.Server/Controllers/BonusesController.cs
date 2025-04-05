@@ -43,6 +43,39 @@ public class BonusesController : BaseApiController
         return Ok(response);
     }
 
+    /// <summary>
+    /// Удаление бонусов клиента
+    /// </summary>
+    /// <param name="id">Идентификатор записи</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpDelete("{id:int}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> DeleteBonuses(int id, CancellationToken cancellationToken)
+    {
+        await _bonusService.DeleteBonusesAsync(id, cancellationToken);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Удаление бонусов клиента
+    /// </summary>
+    /// <param name="id">Идентификатор записи</param>
+    /// <param name="request">Данные по записи</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPatch]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> UpdateBonuses(BonusesUpdateRequest request, CancellationToken cancellationToken)
+    {
+        var bonuses = Mapper.Map<BonusesEntity>(request);
+        await _bonusService.UpdateBonusesAsync(bonuses, cancellationToken);
+        return NoContent();
+    }
 
     /// <summary>
     /// Добавление новой записи о бонусах клиента

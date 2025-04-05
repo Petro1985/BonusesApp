@@ -18,11 +18,28 @@ public class BonusService(ApplicationDbContext appContext) : IBonusService
         var totalCount = await query.CountAsync(cancellationToken);
         
         var bonuses = await query
+            .OrderBy(x => x.Name)
+            .ThenBy(x => x.PhoneNumber)
             .Skip(offset * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
         
         return (bonuses, totalCount);
+    }
+
+    public async Task DeleteBonusesAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var bonusesToRemove = new BonusesEntity { Id = id };
+        appContext.Attach(bonusesToRemove);
+        appContext.Bonuses.Remove(bonusesToRemove);
+        await appContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateBonusesAsync(BonusesEntity bonuses, CancellationToken cancellationToken = default)
+    {
+        appContext.Attach(bonuses);
+        appContext.Bonuses.Update(bonuses);
+        await appContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task AddBonusesAsync(BonusesEntity newBonuses, CancellationToken cancellationToken = default)

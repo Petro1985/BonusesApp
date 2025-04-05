@@ -29,8 +29,16 @@ input.form-control {
 
 .inline-label {
   width: 100%;
-  min-height: 1rem;
+  font-size: 1.2rem;
+  min-height: 1.3rem;
   display: inline-block;
+}
+
+.current-counter-cell
+{
+  width: 50%;
+  text-align: right;
+  margin-right: 10px;
 }
 
 .inline-editor {
