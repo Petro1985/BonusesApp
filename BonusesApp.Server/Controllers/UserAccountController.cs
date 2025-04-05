@@ -88,7 +88,7 @@ public class UserAccountController : BaseApiController
 
         foreach (var item in usersAndRoles)
         {
-            var userVM = _mapper.Map<UserVM>(item.User);
+            var userVM = Mapper.Map<UserVM>(item.User);
             userVM.Roles = item.Roles;
 
             usersVM.Add(userVM);
@@ -155,7 +155,7 @@ public class UserAccountController : BaseApiController
 
         if (ModelState.IsValid)
         {
-            _mapper.Map(user, appUser);
+            Mapper.Map(user, appUser);
 
             var result = await _userAccountService.UpdateUserAsync(appUser, user.Roles);
 
@@ -203,12 +203,12 @@ public class UserAccountController : BaseApiController
         if (appUser == null)
             return NotFound(id);
 
-        var userPVM = _mapper.Map<UserPatchVM>(appUser);
+        var userPVM = Mapper.Map<UserPatchVM>(appUser);
         patch.ApplyTo(userPVM, e => AddModelError(e.ErrorMessage));
 
         if (ModelState.IsValid)
         {
-            _mapper.Map(userPVM, appUser);
+            Mapper.Map(userPVM, appUser);
 
             var result = await _userAccountService.UpdateUserAsync(appUser);
 
@@ -241,7 +241,7 @@ public class UserAccountController : BaseApiController
 
         if (ModelState.IsValid)
         {
-            var appUser = _mapper.Map<ApplicationUser>(user);
+            var appUser = Mapper.Map<ApplicationUser>(user);
             var result = await _userAccountService.CreateUserAsync(appUser, user.Roles!, user.NewPassword!);
 
             if (result.Succeeded)
@@ -356,7 +356,7 @@ public class UserAccountController : BaseApiController
         if (userAndRoles == null)
             return null;
 
-        var userVM = _mapper.Map<UserVM>(userAndRoles.Value.User);
+        var userVM = Mapper.Map<UserVM>(userAndRoles.Value.User);
         userVM.Roles = userAndRoles.Value.Roles;
 
         return userVM;

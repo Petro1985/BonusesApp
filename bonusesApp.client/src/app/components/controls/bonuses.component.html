@@ -6,11 +6,11 @@
   </div>
   <div class="col-lg-4">
     <ul class="nav flex-row">
-      <li [class.active]="hideCompletedTasks" class="nav-item toolbaritem">
-        <a class="nav-link" href="javascript:;" (click)="hideCompletedTasks = !hideCompletedTasks">
-          <i class="fa fa-eye-slash"></i> {{'bonuses.management.HideCompleted' | translate}}
-        </a>
-      </li>
+<!--      <li [class.active]="hideCompletedTasks" class="nav-item toolbaritem">-->
+<!--        <a class="nav-link" href="javascript:;" (click)="hideCompletedTasks = !hideCompletedTasks">-->
+<!--          <i class="fa fa-eye-slash"></i> {{'bonuses.management.HideCompleted' | translate}}-->
+<!--        </a>-->
+<!--      </li>-->
       <li class="nav-item toolbaritem">
         <a class="nav-link" href="javascript:;" (click)="addTask()">
           <i class="fa fa-plus"></i> {{'bonuses.management.AddTask' | translate}}
@@ -43,8 +43,8 @@
 <ng-template #nameTemplate let-row="row" let-value="value">
   @if (editing[row.$$index + '-name']) {
     <input class="inline-editor" appAutofocus type="text" [value]="value"
-           (blur)="updateValue($event, 'name', row)"
-           (keydown.enter)="updateValue($event, 'name', row)"
+           (blur)="updateNameValue($event, row)"
+           (keydown.enter)="updateNameValue($event, row)"
            (keydown.escape)="editing[row.$$index + '-name'] = false"/>
   }
   @else {
@@ -55,12 +55,18 @@
   }
 </ng-template>
 
-<ng-template #descriptionTemplate let-row="row" let-value="value">
-  @if (editing[row.$$index + '-description']) {
+<ng-template #readOnlyTemplate let-row="row" let-value="value">
+  <span class="inline-label" [class.completed]="row.completed">
+    {{value}}
+  </span>
+</ng-template>
+
+<ng-template #settingTemplate let-row="row" let-value="value">
+  @if (editing[row.$$index + '-setting']) {
     <input class="inline-editor" appAutofocus type="text" [value]="value"
-           (blur)="updateValue($event, 'description', row)"
-           (keydown.enter)="updateValue($event, 'description', row)"
-           (keydown.escape)="editing[row.$$index + '-description'] = false"/>
+           (blur)="updateSettingsValue($event, row)"
+           (keydown.enter)="updateSettingsValue($event, row)"
+           (keydown.escape)="editing[row.$$index + '-setting'] = false"/>
   }
   @else {
     <span class="inline-label" [class.completed]="row.completed" attr.title="Double click to edit - {{value}}"
@@ -96,7 +102,7 @@
           <div class="col-md-9">
             <input appAutofocus type="text" id="taskName" name="taskName" placeholder="Enter task name" class="form-control"
                    [ngClass]="{'is-valid': f.submitted && taskName.valid, 'is-invalid' : f.submitted && !taskName.valid}"
-                   [(ngModel)]="taskEdit.name" #taskName="ngModel" required />
+                   [(ngModel)]="bonusEdit.name" #taskName="ngModel" required />
             @if (f.submitted && !taskName.valid) {
               <span class="invalid-feedback">
                 {{'bonuses.editor.TaskNameRequired' | translate}}
@@ -105,20 +111,20 @@
           </div>
         </div>
         <div class="mb-3 row description-form-group">
-          <label class="col-form-label col-md-3" for="taskDescription">{{'bonuses.editor.Description' | translate}}:</label>
+          <label class="col-form-label col-md-3" for="bonusSetting">{{'bonuses.editor.Setting' | translate}}:</label>
           <div class="col-md-9">
-            <input type="text" id="taskDescription" name="taskDescription" placeholder="Enter task description"
-                   class="form-control" [(ngModel)]="taskEdit.description" />
+            <input type="text" id="bonusSetting" name="bonusSetting" placeholder="Enter bonus setting"
+                   class="form-control" [(ngModel)]="bonusEdit.setting" />
           </div>
         </div>
-        <div class="row">
-          <div class="offset-md-3 col-md-9">
-            <div class="form-check">
-              <input class="form-check-input" id="isImportant" name="isImportant" type="checkbox" [(ngModel)]="taskEdit.important">
-              <label for="isImportant" class="form-check-label">{{'bonuses.editor.Important' | translate}}</label>
-            </div>
-          </div>
-        </div>
+<!--        <div class="row">-->
+<!--          <div class="offset-md-3 col-md-9">-->
+<!--            <div class="form-check">-->
+<!--              <input class="form-check-input" id="isImportant" name="isImportant" type="checkbox" [(ngModel)]="bonusEdit.important">-->
+<!--              <label for="isImportant" class="form-check-label">{{'bonuses.editor.Important' | translate}}</label>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
         <div class="row">
           <div class="col-md-12">
             <hr class="hr-separator" />

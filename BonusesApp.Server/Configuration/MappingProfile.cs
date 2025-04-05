@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BonusesApp.Core.Models.Account;
+using BonusesApp.Core.Models.Bonuses;
 using BonusesApp.Core.Services.Account;
 using BonusesApp.Server.ViewModels.Account;
+using BonusesApp.Server.ViewModels.Bonuses;
 using Microsoft.AspNetCore.Identity;
 
 namespace BonusesApp.Server.Configuration;
@@ -42,5 +44,13 @@ public class MappingProfile : Profile
 
         CreateMap<IdentityRoleClaim<string>, PermissionVM>()
             .ConvertUsing(s => ((PermissionVM)ApplicationPermissions.GetPermissionByValue(s.ClaimValue))!);
+
+
+        CreateMap<BonusesEntity, BonusesVM>()
+            .ForMember(x => x.PhoneNumber, map => map.MapFrom(s => s.PhoneNumber))
+            .ForMember(x => x.TotalCounter, map => map.MapFrom(s => s.TotalCount))
+            .ForMember(x => x.CurrentCounter, map => map.MapFrom(s => s.CurrentCount))
+            .ForMember(x => x.Setting, map => map.MapFrom(s => s.Setting))
+            .ReverseMap();
     }
 }

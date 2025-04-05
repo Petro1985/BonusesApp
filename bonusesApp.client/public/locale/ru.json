@@ -364,12 +364,16 @@
   },
   "bonuses": {
     "management": {
+      "AddClient": "Добавить клиента",
+      "PhoneNumber": "Номер телефона",
+      "Name": "Имя клиента",
+      "TotalCounter": "Всего",
+      "CurrentCounter": "текущее значение",
+      "Setting": "Настройка",
       "Search": "Поиск по номеру телефона...",
       "HideCompleted": "Hide Completed",
-      "AddTask": "Add Task",
       "Delete": "Delete task",
       "Important": "Mark as important",
-      "Task": "Task",
       "Description": "Description"
     },
     "editor": {

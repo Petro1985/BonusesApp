@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
     imports: [FormsModule]
 })
 export class SearchBoxComponent {
-  readonly placeholder = input('Search...');
+  public placeholder = input('Search...');
 
   readonly searchChange = output<string>();
 

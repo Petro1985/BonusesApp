@@ -12,6 +12,8 @@ using BonusesApp.Core.Models.Account;
 using BonusesApp.Core.Services;
 using BonusesApp.Core.Services.Account;
 using BonusesApp.Core.Services.Account.Interfaces;
+using BonusesApp.Core.Services.Bonuses;
+using BonusesApp.Core.Services.Bonuses.Interfaces;
 using BonusesApp.Server.Authorization;
 using BonusesApp.Server.Authorization.Requirements;
 using BonusesApp.Server.Configuration;
@@ -190,6 +192,7 @@ builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 // Other Services
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserIdAccessor, UserIdAccessor>();
+builder.Services.AddScoped<IBonusService, BonusService>();
 
 // Auth Handlers
 builder.Services.AddSingleton<IAuthorizationHandler, ViewUserAuthorizationHandler>();

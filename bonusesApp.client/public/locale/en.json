@@ -37,7 +37,7 @@
     "Orders": "Orders",
     "NotFound": "Not-Found",
     "About": "About",
-    "Settings": "Settings"
+    "Setting": "Setting"
   },
   "login": {
     "Login": "Login",
@@ -364,19 +364,23 @@
   },
   "bonuses": {
     "management": {
+      "AddClient": "Add Client",
+      "PhoneNumber": "Phone number",
+      "Name": "Client name",
+      "TotalCounter": "TotalCounter",
+      "CurrentCounter": "CurrentCounter",
+      "Settings": "Settings",
       "Search": "Search for phone number...",
       "HideCompleted": "Hide Completed",
-      "AddTask": "Add Task",
       "Delete": "Delete task",
       "Important": "Mark as important",
-      "Task": "Task",
       "Description": "Description"
     },
     "editor": {
-      "NewTask": "New Task",
+      "PhoneNumber": "PhoneNumber",
       "Name": "Name",
-      "TaskNameRequired": "Task name is required",
-      "Description": "Description",
+      "PhoneNumberRequired": "Phone number is required",
+      "": "Description",
       "Important": "Mark as important",
       "AddTask": "Add Task"
     }

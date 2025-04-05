@@ -11,13 +11,13 @@ namespace BonusesApp.Server.Controllers;
 [SanitizeModel]
 public class BaseApiController : ControllerBase
 {
-    protected readonly IMapper _mapper;
-    protected readonly ILogger<BaseApiController> _logger;
+    protected readonly IMapper Mapper;
+    protected readonly ILogger<BaseApiController> Logger;
 
     public BaseApiController(ILogger<BaseApiController> logger, IMapper mapper)
     {
-        _logger = logger;
-        _mapper = mapper;
+        Logger = logger;
+        Mapper = mapper;
     }
 
     protected string GetCurrentUserId(string errorMsg = "Error retrieving the userId for the current user.")

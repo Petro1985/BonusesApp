@@ -76,7 +76,7 @@ public class UserRoleController : BaseApiController
     public async Task<IActionResult> GetRoles(int pageNumber, int pageSize)
     {
         var roles = await _userRoleService.GetRolesLoadRelatedAsync(pageNumber, pageSize);
-        return Ok(_mapper.Map<List<RoleVM>>(roles));
+        return Ok(Mapper.Map<List<RoleVM>>(roles));
     }
 
     [HttpPut("roles/{id}")]
@@ -97,7 +97,7 @@ public class UserRoleController : BaseApiController
         if (!string.IsNullOrWhiteSpace(role.Id) && id != role.Id)
             return BadRequest("Conflicting role id in parameter and model data");
 
-        _mapper.Map(role, appRole);
+        Mapper.Map(role, appRole);
 
         var result = await _userRoleService
             .UpdateRoleAsync(appRole, role.Permissions?.Select(p => p.Value!).ToArray());
@@ -119,7 +119,7 @@ public class UserRoleController : BaseApiController
         if (role == null)
             return BadRequest($"{nameof(role)} cannot be null");
 
-        var appRole = _mapper.Map<ApplicationRole>(role);
+        var appRole = Mapper.Map<ApplicationRole>(role);
 
         var result = await _userRoleService
             .CreateRoleAsync(appRole, role.Permissions?.Select(p => p.Value!).ToArray() ?? []);
@@ -177,7 +177,7 @@ public class UserRoleController : BaseApiController
     [ProducesResponseType(200, Type = typeof(List<PermissionVM>))]
     public IActionResult GetAllPermissions()
     {
-        return Ok(_mapper.Map<List<PermissionVM>>(ApplicationPermissions.AllPermissions));
+        return Ok(Mapper.Map<List<PermissionVM>>(ApplicationPermissions.AllPermissions));
     }
 
     private async Task<RoleVM?> GetRoleViewModelHelper(string roleName, bool loadRelatedEntities = true)
@@ -187,7 +187,7 @@ public class UserRoleController : BaseApiController
             : await _userRoleService.GetRoleByNameAsync(roleName);
 
         if (role != null)
-            return _mapper.Map<RoleVM>(role);
+            return Mapper.Map<RoleVM>(role);
 
         return null;
     }
