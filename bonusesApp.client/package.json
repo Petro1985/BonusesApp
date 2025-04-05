@@ -43,6 +43,7 @@
     "font-awesome": "^4.7.0",
     "jest-editor-support": "*",
     "ng2-charts": "^7.0.0",
+    "ngx-mask": "^19.0.6",
     "ngx-toasta": "^4.0.0",
     "run-script-os": "*",
     "rxjs": "~7.8.0",

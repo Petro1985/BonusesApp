@@ -368,7 +368,7 @@
       "PhoneNumber": "Номер телефона",
       "Name": "Имя клиента",
       "TotalCounter": "Всего",
-      "CurrentCounter": "текущее значение",
+      "CurrentCounter": "Текущее значение",
       "Setting": "Настройка",
       "Search": "Поиск по номеру телефона...",
       "HideCompleted": "Hide Completed",
@@ -377,12 +377,15 @@
       "Description": "Description"
     },
     "editor": {
-      "NewTask": "New Task",
-      "Name": "Name",
-      "TaskNameRequired": "Task name is required",
-      "Description": "Description",
-      "Important": "Mark as important",
-      "AddTask": "Add Task"
+      "AddClient": "Добавить клиента",
+      "NewClient": "Новый клиент",
+      "PhoneNumber": "Номер телефона",
+      "Name": "Имя",
+      "PhoneNumberRequired": "Номер телефона обязателен",
+      "BonusSettingRequired": "Настройка обязательна",
+      "TotalCounter": "Общее количество",
+      "CurrentCounter": "Текущее количество",
+      "Setting": "Настройка"
     }
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, TemplateRef, inject, input, viewChild } from '@angular/core';
-import { NgClass } from '@angular/common';
+import {CommonModule, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbModal, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,7 @@ import { SearchBoxComponent } from './search-box.component';
 import { AutofocusDirective } from '../../directives/autofocus.directive';
 import {Bonuses} from '../../models/bonuses.model';
 import {BonusesEndpoint} from '../../services/bonuses-endpoint.service';
+import { NgxMaskDirective } from 'ngx-mask';
 
 interface Todo {
   $$index?: number;
@@ -29,7 +30,10 @@ interface Todo {
   templateUrl: './bonuses.component.html',
   styleUrl: './bonuses.component.scss',
   standalone: true,
-  imports: [SearchBoxComponent, NgxDatatableModule, FormsModule, AutofocusDirective, NgbTooltip, NgClass, TranslateModule]
+  imports: [
+    SearchBoxComponent, NgxDatatableModule, FormsModule,
+    AutofocusDirective, NgbTooltip, NgClass,
+    TranslateModule, CommonModule, NgxMaskDirective ]
 })
 export class BonusesComponent implements OnInit, OnDestroy {
   private alertService = inject(AlertService);
@@ -138,7 +142,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
         prop: 'setting',
         name: gT('bonuses.management.Setting'),
         width: 160,
-        cellTemplate: this.readOnlyTemplate(),
+        cellTemplate: this.settingTemplate(),
         resizeable: false,
         canAutoResize: false,
         sortable: false,
@@ -169,7 +173,7 @@ export class BonusesComponent implements OnInit, OnDestroy {
     this.alertService.showMessage(caption, message, MessageSeverity.error);
   }
 
-  addTask() {
+  addClient() {
     this.formResetToggle = false;
 
     setTimeout(() => {

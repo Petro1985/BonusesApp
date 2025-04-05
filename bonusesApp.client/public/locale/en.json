@@ -369,7 +369,7 @@
       "Name": "Client name",
       "TotalCounter": "TotalCounter",
       "CurrentCounter": "CurrentCounter",
-      "Settings": "Settings",
+      "Setting": "Setting",
       "Search": "Search for phone number...",
       "HideCompleted": "Hide Completed",
       "Delete": "Delete task",
@@ -379,10 +379,13 @@
     "editor": {
       "PhoneNumber": "PhoneNumber",
       "Name": "Name",
+      "TotalCounter": "TotalCounter",
+      "CurrentCounter": "CurrentCounter",
+      "Setting": "Setting",
+      "AddClient": "AddClient",
+      "NewClient": "New client",
       "PhoneNumberRequired": "Phone number is required",
-      "": "Description",
-      "Important": "Mark as important",
-      "AddTask": "Add Task"
+      "BonusSettingRequired": "Bonus setting is required"
     }
   }
 }

@@ -12,8 +12,8 @@
 <!--        </a>-->
 <!--      </li>-->
       <li class="nav-item toolbaritem">
-        <a class="nav-link" href="javascript:;" (click)="addTask()">
-          <i class="fa fa-plus"></i> {{'bonuses.management.AddTask' | translate}}
+        <a class="nav-link" href="javascript:;" (click)="addClient()">
+          <i class="fa fa-plus"></i> {{'bonuses.management.AddClient' | translate}}
         </a>
       </li>
     </ul>
@@ -90,51 +90,87 @@
 
 <ng-template #editorModal let-modal>
   <div class="modal-header">
-    <h5 class="modal-title"><i class="fa fa-tasks"></i> {{'bonuses.editor.NewTask' | translate}}</h5>
+    <h5 class="modal-title"><i class="fa fa-tasks"></i> {{'bonuses.editor.NewClient' | translate}}</h5>
     <button type="button" class="btn-close fs-sm" title="Close" (click)="modal.close()" tabindex="-1"></button>
   </div>
   <div class="modal-body">
     @if (formResetToggle) {
       <form name="taskEditorForm" #f="ngForm" novalidate (ngSubmit)="f.form.valid ? save() && modal.close() :
-                        (!taskName.valid && showErrorAlert('Task name is required', 'Please enter a name for the task'));">
+                        (!phoneNumber.valid && showErrorAlert('Phone number is required', 'Please enter a phone number'));">
+
         <div class="mb-3 row">
-          <label class="col-form-label col-md-3" for="taskName">{{'bonuses.editor.Name' | translate}}:</label>
-          <div class="col-md-9">
-            <input appAutofocus type="text" id="taskName" name="taskName" placeholder="Enter task name" class="form-control"
-                   [ngClass]="{'is-valid': f.submitted && taskName.valid, 'is-invalid' : f.submitted && !taskName.valid}"
-                   [(ngModel)]="bonusEdit.name" #taskName="ngModel" required />
-            @if (f.submitted && !taskName.valid) {
+          <label class="col-form-label col-md-5" for="phoneNumber">{{'bonuses.editor.PhoneNumber' | translate}}:</label>
+          <div class="col-md-7">
+            <input
+                   type="text"
+                   prefix="+7 "
+                   mask="(000) 000-00-00"
+                   placeholder="+7 (___) ___-__-__"
+                   appAutofocus
+                   id="phoneNumber" name="phoneNumber"
+                   class="form-control"
+                   [ngClass]="{'is-valid': f.submitted && phoneNumber.valid, 'is-invalid' : f.submitted && !phoneNumber.valid}"
+                   [(ngModel)]="bonusEdit.phoneNumber" #phoneNumber="ngModel" required minlength="10" />
+            @if (f.submitted && !phoneNumber.valid) {
               <span class="invalid-feedback">
-                {{'bonuses.editor.TaskNameRequired' | translate}}
+                {{'bonuses.editor.PhoneNumberRequired' | translate}}
               </span>
             }
           </div>
         </div>
-        <div class="mb-3 row description-form-group">
-          <label class="col-form-label col-md-3" for="bonusSetting">{{'bonuses.editor.Setting' | translate}}:</label>
-          <div class="col-md-9">
-            <input type="text" id="bonusSetting" name="bonusSetting" placeholder="Enter bonus setting"
-                   class="form-control" [(ngModel)]="bonusEdit.setting" />
+
+        <div class="mb-3 row">
+          <label class="col-form-label col-md-5" for="clientName">{{'bonuses.editor.Name' | translate}}:</label>
+          <div class="col-md-7">
+            <input type="text" id="clientName" name="clientName" placeholder="Enter client's name" class="form-control"
+                   [ngClass]=""
+                   [(ngModel)]="bonusEdit.name" #taskName="ngModel" />
           </div>
         </div>
-<!--        <div class="row">-->
-<!--          <div class="offset-md-3 col-md-9">-->
-<!--            <div class="form-check">-->
-<!--              <input class="form-check-input" id="isImportant" name="isImportant" type="checkbox" [(ngModel)]="bonusEdit.important">-->
-<!--              <label for="isImportant" class="form-check-label">{{'bonuses.editor.Important' | translate}}</label>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+
+        <div class="mb-3 row">
+          <label class="col-form-label col-md-5" for="bonusTotalCounter">{{'bonuses.editor.TotalCounter' | translate}}:</label>
+          <div class="col-md-7">
+            <input type="text" id="bonusTotalCounter" name="bonusTotalCounter" placeholder="Enter total count"
+                   class="form-control" [(ngModel)]="bonusEdit.totalCounter" />
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label class="col-form-label col-md-5" for="bonusCurrentCounter">{{'bonuses.editor.CurrentCounter' | translate}}:</label>
+          <div class="col-md-7">
+            <input type="text" id="bonusCurrentCounter" name="bonusCurrentCounter" placeholder="Enter current count"
+                   class="form-control" [(ngModel)]="bonusEdit.currentCounter" />
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label class="col-form-label col-md-5" for="bonusSetting">{{'bonuses.editor.Setting' | translate}}:</label>
+          <div class="col-md-7">
+            <input type="text" id="bonusSetting" name="bonusSetting" placeholder="Enter bonus setting" class="form-control"
+                   [ngClass]="{'is-valid': f.submitted && bonusSetting.valid, 'is-invalid' : f.submitted && !bonusSetting.valid}"
+                   [(ngModel)]="bonusEdit.setting"
+                   #bonusSetting="ngModel" required/>
+            @if (f.submitted && !bonusSetting.valid) {
+              <span class="invalid-feedback">
+                {{'bonuses.editor.BonusSettingRequired' | translate}}
+              </span>
+            }
+          </div>
+        </div>
+
         <div class="row">
           <div class="col-md-12">
             <hr class="hr-separator" />
           </div>
         </div>
+
         <div class="float-end">
-          <button type="submit" class="btn btn-primary">{{'bonuses.editor.AddTask' | translate}}</button>
+          <button type="submit" class="btn btn-primary">{{'bonuses.editor.AddClient' | translate}}</button>
         </div>
         <div class="clearfix"></div>
       </form>
     }
   </div>
 </ng-template>
+
