@@ -43,7 +43,12 @@ public class ApplicationDbContext(DbContextOptions options, IUserIdAccessor user
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<BonusesEntity>().ToTable("Bonuses");
+        builder.Entity<BonusesEntity>().ToTable("Bonuses")
+            .HasIndex(x => x.PhoneNumber);
+
+        builder.Entity<BonusesEntity>()
+            .HasIndex(x => x.Name);
+        
     }
 
     public override int SaveChanges()

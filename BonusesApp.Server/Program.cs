@@ -47,19 +47,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     // User settings
     options.User.RequireUniqueEmail = true;
 
-    // Password settings
-    /*
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 8;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireLowercase = false;
-
-    // Lockout settings
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-    options.Lockout.MaxFailedAccessAttempts = 10;
-    */
-
     // Configure Identity to use the same JWT claims as OpenIddict
     options.ClaimsIdentity.UserNameClaimType = Claims.Name;
     options.ClaimsIdentity.UserIdClaimType = Claims.Subject;

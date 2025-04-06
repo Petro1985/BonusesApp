@@ -1,0 +1,26 @@
+﻿version: '3.9'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: BonusesApp.Server/Dockerfile
+    ports:
+      - "443:5001"
+      - "80:8080"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=MyDb;User ID=postgres;Password=123qwe!@#QWE
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123qwe!@#QWE
+      POSTGRES_DB: MyDb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  pgdata:
