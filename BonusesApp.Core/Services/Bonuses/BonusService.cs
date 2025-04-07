@@ -12,7 +12,10 @@ public class BonusService(ApplicationDbContext appContext) : IBonusService
         IQueryable<BonusesEntity> query = appContext.Bonuses; 
         if (!string.IsNullOrWhiteSpace(search))
         {
-            query = query.Where(x => EF.Functions.Like(x.PhoneNumber, $"%{search}%"));
+            query = query
+                .Where(x => 
+                    EF.Functions.Like(x.PhoneNumber, $"%{search}%") ||
+                    EF.Functions.Like(x.Name, $"%{search}%"));
         }
         
         var totalCount = await query.CountAsync(cancellationToken);

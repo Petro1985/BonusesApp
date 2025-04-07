@@ -3,22 +3,27 @@
     <div class="search-box">
       <app-search-box
         (searchChange)="onSearchChanged($event)"
-        placeholder="{{'bonuses.management.Search' | translate}}" />
+        placeholder="{{'bonuses.management.Search' | translate}}"/>
     </div>
   </div>
   <div class="col-lg-4">
     <ul class="nav flex-row">
       <li class="nav-item toolbaritem">
         <a class="nav-link" href="javascript:;" (click)="addClient()">
-          <i class="fa fa-plus"></i> {{'bonuses.management.AddClient' | translate}}
+          <i class="fa fa-plus"></i> {{ 'bonuses.management.AddClient' | translate }}
+        </a>
+      </li>
+      <li class="nav-item toolbaritem">
+        <a class="nav-link" href="javascript:;" (click)="downloadBonuses()">
+          <i class="fa fa-cloud-download"></i> {{ 'bonuses.management.Download' | translate }}
         </a>
       </li>
     </ul>
   </div>
 </div>
-<ngx-datatable class="material colored-header sm table-hover"
+<ngx-datatable class="material colored-header sm table-hover bonuses-table"
                [loadingIndicator]="loadingIndicator"
-               [rows]="rows"
+               [rows]="data"
                [rowHeight]="35"
                [headerHeight]="37"
                [footerHeight]="35"
@@ -30,34 +35,117 @@
                [offset]="offset"
                [limit]="limit"
                [externalPaging]="true"
-               (page)="onPage($event)"
+               (page)="onPage($event)"></ngx-datatable>
+<div class="cards-list">
+  @for (card of data; track card.id) {
+    <div class="col">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title mobile-user"><i class="fa fa-user"></i>
+            @if (editing[card.$$index + '-name']) {
+              <input class="" style="display: inline" appAutofocus type="text" [value]="card.name"
+                     (blur)="updateNameValue($event, card)"
+                     (keydown.enter)="updateNameValue($event, card)"
+                     (keydown.escape)="editing[card.$$index + '-name'] = false"/>
+            } @else {
+              {{ card.name }}
+              <a class="" href="javascript:;"
+                 container="body" (click)="editing[card.$$index + '-name'] = true">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a class="delete-user-icon" href="javascript:;"
+                 container="body" (click)="delete(card)">
+                <i class="fa fa-trash"></i>
+              </a>
+            }
+          </h5>
 
->
 
-</ngx-datatable>
+          <p class="mb-2">
+            <strong><i class="fa fa-phone me-1"></i>{{ 'bonuses.editor.PhoneNumber' | translate }}
+              :</strong> {{ card.phoneNumber }}
+          </p>
+          <p class="mb-2">
+            <strong>{{ 'bonuses.editor.TotalCounter' | translate }}:</strong> {{ card.totalCounter }}
+          </p>
+          <p class="mb-2">
+            <strong>{{ 'bonuses.editor.CurrentCounter' | translate }}:</strong> {{ card.currentCounter }}
+            <a class="" href="javascript:;"
+               container="body" (click)="addCount(card)">
+              <i class="fa fa-lg fa-plus"></i>
+            </a>
 
+          </p>
+          <p class="mb-3">
+
+            <strong>{{ 'bonuses.editor.Setting' | translate }}:</strong>
+            @if (editing[card.$$index + '-setting']) {
+              <input class="" style="display: inline" appAutofocus type="text" [value]="card.setting"
+                     (blur)="updateSettingsValue($event, card)"
+                     (keydown.enter)="updateSettingsValue($event, card)"
+                     (keydown.escape)="editing[card.$$index + '-setting'] = false"/>
+            } @else {
+              {{ card.setting }}
+              <a class="" href="javascript:;" ngbTooltip="{{'bonuses.management.EditSetting' | translate}}"
+                 container="body" (click)="editing[card.$$index + '-setting'] = true">
+                <i class="fa fa-pencil"></i>
+              </a>
+            }
+          </p>
+
+          <!-- Прогресс-бар -->
+          <div class="progress" style="height: 20px;">
+            <div
+              class="progress-bar bg-success"
+              role="progressbar"
+              [style.width.%]="(card.currentCounter / card.setting) * 100"
+              [attr.aria-valuenow]="card.currentCounter"
+              [attr.aria-valuemin]="0"
+              [attr.aria-valuemax]="card.setting"
+              [ngClass]="{
+                  'bg-success': card.currentCounter / card.setting >= 0.8,
+                  'bg-warning': card.currentCounter / card.setting >= 0.6 && card.currentCounter / card.setting < 0.8,
+                  'bg-danger': card.currentCounter / card.setting < 0.6}">
+              {{ card.currentCounter }}/{{ card.setting }}
+
+            </div>
+          </div>
+          <a class="btn btn-sm w-100 mt-2 {{card.currentCounter < card.setting && 'disabled'}}"
+             [class.btn-success]="card.currentCounter >= card.setting"
+             [class.btn-outline-secondary]="card.currentCounter < card.setting"
+             href="javascript:;"
+             container="body" (click)="card.currentCounter >= card.setting && giveBonus(card)">
+            <i class="fa fa-lg"
+               [class.fa-times]="card.currentCounter < card.setting"
+            >{{ card.currentCounter >= card.setting ? gT('bonuses.management.GiveBonus') : '' }}</i>
+          </a>
+        </div>
+      </div>
+    </div>
+  }
+</div>
 <ng-template #nameTemplate let-row="row" let-value="value">
   @if (editing[row.$$index + '-name']) {
     <input class="inline-editor" appAutofocus type="text" [value]="value"
            (blur)="updateNameValue($event, row)"
            (keydown.enter)="updateNameValue($event, row)"
            (keydown.escape)="editing[row.$$index + '-name'] = false"/>
-  }
-  @else {
+  } @else {
     <a class="me-2" href="javascript:;" ngbTooltip="{{'bonuses.management.EditName' | translate}}"
        container="body" (click)="editing[row.$$index + '-name'] = true">
       <i class="fa fa-pencil"></i>
     </a>
-    <span class="inline-label" [class.completed]="row.completed" attr.title="{{'bonuses.management.DoubleClickToEdit' | translate}}"
+    <span class="inline-label" [class.completed]="row.completed"
+          attr.title="{{'bonuses.management.DoubleClickToEdit' | translate}}"
           (dblclick)="editing[row.$$index + '-name'] = true">
-      {{value}}
+      {{ value }}
     </span>
   }
 </ng-template>
 
 <ng-template #readOnlyTemplate let-row="row" let-value="value">
   <span class="inline-label">
-    {{value}}
+    {{ value }}
   </span>
 </ng-template>
 
@@ -67,11 +155,10 @@
            (blur)="updateSettingsValue($event, row)"
            (keydown.enter)="updateSettingsValue($event, row)"
            (keydown.escape)="editing[row.$$index + '-setting'] = false"/>
-  }
-  @else {
+  } @else {
     <span class="inline-label cell-with-icon" attr.title="{{'bonuses.management.DoubleClickToEdit' | translate}}"
           (dblclick)="editing[row.$$index + '-setting'] = true">
-      {{value}}
+      {{ value }}
     </span>
     <a class="" href="javascript:;" ngbTooltip="{{'bonuses.management.EditSetting' | translate}}"
        container="body" (click)="editing[row.$$index + '-setting'] = true">
@@ -89,7 +176,7 @@
 </ng-template>
 
 <ng-template #giveBonusTemplate let-row="row">
-  <a class="btn btn-sm w-100" [class.btn-success] ="row.currentCounter >= row.setting" href="javascript:;"
+  <a class="btn btn-sm w-100" [class.btn-success]="row.currentCounter >= row.setting" href="javascript:;"
      ngbTooltip="{{ (row.currentCounter >= row.setting ? 'bonuses.management.GiveBonus' : 'bonuses.management.BonusNotAllow') | translate}}"
      container="body" (click)="row.currentCounter >= row.setting && giveBonus(row)">
     <i class="fa"
@@ -100,7 +187,7 @@
 </ng-template>
 
 <ng-template #currentCountTemplate let-row="row" let-value="value">
-  <span class="inline-label cell-with-icon" > {{value}} </span>
+  <span class="inline-label cell-with-icon"> {{ value }} </span>
   <a class="" href="javascript:;" ngbTooltip="{{'bonuses.management.AddCount' | translate}}"
      container="body" (click)="addCount(row)">
     <i class="fa fa-plus"></i>
@@ -110,7 +197,7 @@
 
 <ng-template #editorModal let-modal>
   <div class="modal-header">
-    <h5 class="modal-title"><i class="fa fa-tasks"></i> {{'bonuses.editor.NewClient' | translate}}</h5>
+    <h5 class="modal-title"><i class="fa fa-tasks"></i> {{ 'bonuses.editor.NewClient' | translate }}</h5>
     <button type="button" class="btn-close fs-sm" title="Close" (click)="modal.close()" tabindex="-1"></button>
   </div>
   <div class="modal-body">
@@ -119,61 +206,65 @@
                         (!phoneNumber.valid && showErrorAlert('Phone number is required', 'Please enter a phone number'));">
 
         <div class="mb-3 row">
-          <label class="col-form-label col-md-5" for="phoneNumber">{{'bonuses.editor.PhoneNumber' | translate}}:</label>
+          <label class="col-form-label col-md-5" for="phoneNumber">{{ 'bonuses.editor.PhoneNumber' | translate }}
+            :</label>
           <div class="col-md-7">
             <input
-                   type="text"
-                   prefix="+7 "
-                   mask="(000) 000-00-00"
-                   placeholder="+7 (___) ___-__-__"
-                   appAutofocus
-                   id="phoneNumber" name="phoneNumber"
-                   class="form-control"
-                   [ngClass]="{'is-valid': f.submitted && phoneNumber.valid, 'is-invalid' : f.submitted && !phoneNumber.valid}"
-                   [(ngModel)]="bonusEdit.phoneNumber" #phoneNumber="ngModel" required minlength="10" />
+              type="text"
+              prefix="+7 "
+              mask="(000) 000-00-00"
+              placeholder="+7 (___) ___-__-__"
+              appAutofocus
+              id="phoneNumber" name="phoneNumber"
+              class="form-control"
+              [ngClass]="{'is-valid': f.submitted && phoneNumber.valid, 'is-invalid' : f.submitted && !phoneNumber.valid}"
+              [(ngModel)]="bonusEdit.phoneNumber" #phoneNumber="ngModel" required minlength="10"/>
             @if (f.submitted && !phoneNumber.valid) {
               <span class="invalid-feedback">
-                {{'bonuses.editor.PhoneNumberRequired' | translate}}
+                {{ 'bonuses.editor.PhoneNumberRequired' | translate }}
               </span>
             }
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label class="col-form-label col-md-5" for="clientName">{{'bonuses.editor.Name' | translate}}:</label>
+          <label class="col-form-label col-md-5" for="clientName">{{ 'bonuses.editor.Name' | translate }}:</label>
           <div class="col-md-7">
             <input type="text" id="clientName" name="clientName" placeholder="Enter client's name" class="form-control"
                    [ngClass]=""
-                   [(ngModel)]="bonusEdit.name" #taskName="ngModel" />
+                   [(ngModel)]="bonusEdit.name" #taskName="ngModel"/>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label class="col-form-label col-md-5" for="bonusTotalCounter">{{'bonuses.editor.TotalCounter' | translate}}:</label>
+          <label class="col-form-label col-md-5" for="bonusTotalCounter">{{ 'bonuses.editor.TotalCounter' | translate }}
+            :</label>
           <div class="col-md-7">
             <input type="number" id="bonusTotalCounter" name="bonusTotalCounter" placeholder="Enter total count"
-                   class="form-control" [(ngModel)]="bonusEdit.totalCounter" />
+                   class="form-control" [(ngModel)]="bonusEdit.totalCounter"/>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label class="col-form-label col-md-5" for="bonusCurrentCounter">{{'bonuses.editor.CurrentCounter' | translate}}:</label>
+          <label class="col-form-label col-md-5"
+                 for="bonusCurrentCounter">{{ 'bonuses.editor.CurrentCounter' | translate }}:</label>
           <div class="col-md-7">
             <input type="number" id="bonusCurrentCounter" name="bonusCurrentCounter" placeholder="Enter current count"
-                   class="form-control" [(ngModel)]="bonusEdit.currentCounter" />
+                   class="form-control" [(ngModel)]="bonusEdit.currentCounter"/>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label class="col-form-label col-md-5" for="bonusSetting">{{'bonuses.editor.Setting' | translate}}:</label>
+          <label class="col-form-label col-md-5" for="bonusSetting">{{ 'bonuses.editor.Setting' | translate }}:</label>
           <div class="col-md-7">
-            <input type="number" id="bonusSetting" name="bonusSetting" placeholder="Enter bonus setting" class="form-control"
+            <input type="number" id="bonusSetting" name="bonusSetting" placeholder="Enter bonus setting"
+                   class="form-control"
                    [ngClass]="{'is-valid': f.submitted && bonusSetting.valid, 'is-invalid' : f.submitted && !bonusSetting.valid}"
                    [(ngModel)]="bonusEdit.setting"
                    #bonusSetting="ngModel" required/>
             @if (f.submitted && !bonusSetting.valid) {
               <span class="invalid-feedback">
-                {{'bonuses.editor.BonusSettingRequired' | translate}}
+                {{ 'bonuses.editor.BonusSettingRequired' | translate }}
               </span>
             }
           </div>
@@ -181,12 +272,12 @@
 
         <div class="row">
           <div class="col-md-12">
-            <hr class="hr-separator" />
+            <hr class="hr-separator"/>
           </div>
         </div>
 
         <div class="float-end">
-          <button type="submit" class="btn btn-primary">{{'bonuses.editor.AddClient' | translate}}</button>
+          <button type="submit" class="btn btn-primary">{{ 'bonuses.editor.AddClient' | translate }}</button>
         </div>
         <div class="clearfix"></div>
       </form>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, TemplateRef, inject, input, viewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, inject, input, viewChild } from '@angular/core';
 import {CommonModule, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -43,7 +43,7 @@ export class BonusesComponent implements OnInit {
   gT = (key: string) => this.translationService.getTranslation(key);
 
   columns: TableColumn[] = [];
-  rows: Bonuses[] = [];
+  data: Bonuses[] = [];
   rowsCache: Bonuses[] = [];
   editing: Record<string, boolean> = {};
   bonusEdit: Partial<Bonuses> = {};
@@ -104,7 +104,7 @@ export class BonusesComponent implements OnInit {
       {
         prop: 'phoneNumber',
         name: this.gT('bonuses.management.PhoneNumber'),
-        width: 200,
+        width: 180,
         resizeable: false,
         canAutoResize: false,
         sortable: false,
@@ -115,6 +115,7 @@ export class BonusesComponent implements OnInit {
         prop: 'name',
         name: this.gT('bonuses.management.Name'),
         width: 300,
+        minWidth: 180,
         cellTemplate: this.nameTemplate(),
         resizeable: false,
         canAutoResize: true,
@@ -124,9 +125,10 @@ export class BonusesComponent implements OnInit {
       {
         prop: 'totalCounter',
         name: this.gT('bonuses.management.TotalCounter'),
-        width: 160,
+        width: 100,
+        minWidth: 70,
         resizeable: false,
-        canAutoResize: false,
+        canAutoResize: true,
         sortable: false,
         draggable: false,
         cellTemplate: this.readOnlyTemplate()
@@ -134,10 +136,11 @@ export class BonusesComponent implements OnInit {
       {
         prop: 'currentCounter',
         name: this.gT('bonuses.management.CurrentCounter'),
-        width: 160,
+        width: 140,
+        minWidth: 60,
         cellTemplate: this.currentCountTemplate(),
         resizeable: false,
-        canAutoResize: false,
+        canAutoResize: true,
         sortable: false,
         draggable: false
       },
@@ -145,9 +148,10 @@ export class BonusesComponent implements OnInit {
         prop: 'setting',
         name: this.gT('bonuses.management.Setting'),
         width: 160,
+        minWidth: 70,
         cellTemplate: this.settingTemplate(),
         resizeable: false,
-        canAutoResize: false,
+        canAutoResize: true,
         sortable: false,
         draggable: false
       },
@@ -155,9 +159,10 @@ export class BonusesComponent implements OnInit {
         prop: '',
         name: this.gT('bonuses.management.GiveBonus'),
         width: 150,
+        minWidth: 70,
         cellTemplate: this.giveBonusTemplate(),
         resizeable: false,
-        canAutoResize: false,
+        canAutoResize: true,
         sortable: false,
         draggable: false
       }
@@ -216,7 +221,8 @@ export class BonusesComponent implements OnInit {
   }
 
   delete(row: Bonuses) {
-    const message = this.gT('bonuses.management.DeleteQuestion')
+    const formattedMessage = this.gT('bonuses.management.DeleteQuestion')
+    const message = formattedMessage.replace("{0}", row.name).replace("{1}", row.phoneNumber);
     this.alertService.showDialog(message, DialogType.confirm, () => this.deleteHelper(row));
   }
 
@@ -232,7 +238,7 @@ export class BonusesComponent implements OnInit {
     if (withClearing)
     {
       this.totalCount = 0;
-      this.rows = [];
+      this.data = [];
     }
 
     this.bonusesService.getBonuses(this.offset, this.limit, this.searchString)
@@ -240,7 +246,7 @@ export class BonusesComponent implements OnInit {
       {
         this.totalCount = data.totalCount;
         this.refreshDataIndexes(data.bonuses)
-        this.rows = data.bonuses;
+        this.data = data.bonuses;
         this.rowsCache = [...data.bonuses];
         this.isDataLoaded = true;
         setTimeout(() => { this.loadingIndicator = false; }, 1500);
@@ -288,6 +294,40 @@ export class BonusesComponent implements OnInit {
       .subscribe(() =>
       {
         this.getBonuses();
+      });
+  }
+
+  downloadBonuses() {
+    this.bonusesService.getBonuses(0, 2_147_483_647, '')
+      .subscribe(x =>
+      {
+        const data = x.bonuses;
+        const csvRows = [];
+
+        const firstLine = this.columns.slice(0, -1).map(x => x.name).join(';');
+        // Заголовки
+        const headers = Object.keys(data[0]);
+        csvRows.push(firstLine);
+
+        // Данные
+        for (const row of data) {
+          const values = headers.map(header => {
+            const escaped = ('' + row[header as keyof Bonuses]).replace(/"/g, '\\"');
+            return `"${escaped}"`;
+          });
+          csvRows.push(values.join(';'));
+        }
+
+        const csvContent = '\uFEFF' + csvRows.join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'data.csv');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       });
   }
 }

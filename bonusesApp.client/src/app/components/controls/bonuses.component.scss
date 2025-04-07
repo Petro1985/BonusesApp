@@ -8,6 +8,7 @@ input.form-control {
 
 .search-box {
   margin: 0;
+  position: relative;
 }
 
 .nav-item.toolbaritem a {
@@ -52,4 +53,44 @@ input.form-control {
 
 .hr-separator {
   margin: 10px 0;
+}
+
+.bonuses-table
+{
+  display: block;
+}
+
+.cards-list{
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .mobile-user{
+    display: flex;
+    gap: 5px;
+    .delete-user-icon{
+      margin-left: auto;
+    }
+  }
+
+  .bonuses-table
+  {
+    display: none;
+  }
+
+  .cards-list{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+  }
+
+  .row.control-box {
+    position: sticky;
+    top: 56px;
+    z-index: 999;
+    background-color: white;
+    padding: 0.75rem;
+    border-bottom: 1px solid #ddd;
+  }
+
 }

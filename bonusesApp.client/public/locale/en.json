@@ -380,8 +380,9 @@
       "DoubleClickToEdit": "Double click to edit",
       "EditSetting": "Edit setting",
       "EditName": "Edit name",
+      "Download": "Download",
       "Delete": "Delete client",
-      "DeleteQuestion": "Are you sure you want to delete the client?",
+      "DeleteQuestion": "Are you sure you want to delete the client \"{0}\" (phone {1})?",
       "GiveBonusQuestion": "Are you sure you want to give bonus to the client \"{0}\" (phone {1})?"
     },
     "editor": {
