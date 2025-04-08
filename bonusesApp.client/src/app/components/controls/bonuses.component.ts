@@ -54,8 +54,8 @@ export class BonusesComponent implements OnInit {
   private searchString: string = '';
 
   offset: number = 0;
-  limit: number = 10;
-  totalCount: number = 0;
+  pageSize: number = 10;
+  totalItems: number = 0;
 
   // защита от слишком частого обновления записи
   private debounceTimeoutDict: Map<number, ReturnType<typeof setTimeout>> = new Map<number, ReturnType<typeof setTimeout>>();
@@ -237,26 +237,34 @@ export class BonusesComponent implements OnInit {
   private getBonuses(withClearing: boolean = false) {
     if (withClearing)
     {
-      this.totalCount = 0;
+      this.totalItems = 0;
       this.data = [];
     }
 
-    this.bonusesService.getBonuses(this.offset, this.limit, this.searchString)
+    this.bonusesService.getBonuses(this.offset, this.pageSize, this.searchString)
       .subscribe(data =>
       {
-        this.totalCount = data.totalCount;
-        this.refreshDataIndexes(data.bonuses)
-        this.data = data.bonuses;
-        this.rowsCache = [...data.bonuses];
-        this.isDataLoaded = true;
-        setTimeout(() => { this.loadingIndicator = false; }, 1500);
+        if (this.offset != 0 && data.bonuses.length === 0)
+        {
+          this.offset = 0;
+          this.getBonuses()
+        }
+        else
+        {
+          this.totalItems = data.totalCount;
+          this.refreshDataIndexes(data.bonuses)
+          this.data = data.bonuses;
+          this.rowsCache = [...data.bonuses];
+          this.isDataLoaded = true;
+          setTimeout(() => { this.loadingIndicator = false; }, 1500);
+        }
       });
   }
 
-  onPage($event: any) {
+  onPage($event: {offset: number, pageSize: number}) {
     this.offset = $event.offset;
-    this.totalCount = $event.offset;
-    this.limit = $event.pageSize;
+    this.totalItems = $event.offset;
+    this.pageSize = $event.pageSize;
     this.getBonuses(true);
   }
 
@@ -267,7 +275,7 @@ export class BonusesComponent implements OnInit {
     this.updateBonusEntry(row);
   }
 
-  private updateBonusEntry(row: Bonuses, withClearing: boolean = false) {
+  private updateBonusEntry(row: Bonuses) {
     if (this.debounceTimeoutDict.has(row.id)) {
       clearTimeout(this.debounceTimeoutDict.get(row.id));
     }
@@ -275,7 +283,6 @@ export class BonusesComponent implements OnInit {
       this.bonusesService.updateBonuses(row)
         .subscribe(() =>
         {
-          this.getBonuses(withClearing);
         });
       this.debounceTimeoutDict.delete(row.id);
     }, this.TimeOut));
@@ -330,4 +337,6 @@ export class BonusesComponent implements OnInit {
         document.body.removeChild(a);
       });
   }
+
+  protected readonly Math = Math;
 }

@@ -1,4 +1,4 @@
-<div class="row control-box">
+<div class="row control-box bg-body text-body">
   <div class="col-lg-8">
     <div class="search-box">
       <app-search-box
@@ -31,11 +31,12 @@
                [scrollbarV]="verticalScrollbar()"
                [summaryRow]="false"
                [columnMode]="'force'"
-               [count]="totalCount"
+               [count]="totalItems"
                [offset]="offset"
-               [limit]="limit"
+               [limit]="pageSize"
                [externalPaging]="true"
                (page)="onPage($event)"></ngx-datatable>
+
 <div class="cards-list">
   @for (card of data; track card.id) {
     <div class="col">
@@ -43,7 +44,7 @@
         <div class="card-body">
           <h5 class="card-title mobile-user"><i class="fa fa-user"></i>
             @if (editing[card.$$index + '-name']) {
-              <input class="" style="display: inline" appAutofocus type="text" [value]="card.name"
+              <input class="" appAutofocus type="text" [value]="card.name"
                      (blur)="updateNameValue($event, card)"
                      (keydown.enter)="updateNameValue($event, card)"
                      (keydown.escape)="editing[card.$$index + '-name'] = false"/>
@@ -74,10 +75,8 @@
                container="body" (click)="addCount(card)">
               <i class="fa fa-lg fa-plus"></i>
             </a>
-
           </p>
           <p class="mb-3">
-
             <strong>{{ 'bonuses.editor.Setting' | translate }}:</strong>
             @if (editing[card.$$index + '-setting']) {
               <input class="" style="display: inline" appAutofocus type="text" [value]="card.setting"
@@ -96,7 +95,7 @@
           <!-- Прогресс-бар -->
           <div class="progress" style="height: 20px;">
             <div
-              class="progress-bar bg-success"
+              class="progress-bar bg-success text-light"
               role="progressbar"
               [style.width.%]="(card.currentCounter / card.setting) * 100"
               [attr.aria-valuenow]="card.currentCounter"
@@ -123,6 +122,28 @@
       </div>
     </div>
   }
+  <div class="col-12 mt-3">
+    <nav aria-label="Pagination">
+      <ul class="pagination justify-content-center mb-0">
+        <li class="page-item" [class.disabled]="offset === 0">
+          <a class="page-link fa fa-arrow-left" href="javascript:;" (click)="onPage({offset: 0, pageSize: 10})">
+          </a>
+        </li>
+
+        <li class="page-item">
+        <span class="page-link"><strong>
+          Показаны с {{ (offset) * pageSize + ( totalItems === 0? 0 : 1) }} по {{ Math.min((offset + 1) * pageSize, totalItems) }}
+          всего {{ totalItems }}</strong>
+        </span>
+        </li>
+
+        <li class="page-item" [class.disabled]="offset === Math.floor((totalItems - 1) / pageSize)">
+          <a class="page-link fa fa-arrow-right" tabindex="-1" href="javascript:;" (click)="onPage({offset: offset + 1, pageSize: 10})">
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
 <ng-template #nameTemplate let-row="row" let-value="value">
   @if (editing[row.$$index + '-name']) {

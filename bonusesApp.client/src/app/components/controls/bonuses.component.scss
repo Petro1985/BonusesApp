@@ -71,6 +71,10 @@ input.form-control {
     .delete-user-icon{
       margin-left: auto;
     }
+
+    input {
+      display: inline;
+    }
   }
 
   .bonuses-table
@@ -82,15 +86,19 @@ input.form-control {
     display: flex;
     gap: 10px;
     flex-direction: column;
+
+    .pagination{
+      -webkit-align-items: center;
+    }
   }
 
   .row.control-box {
     position: sticky;
     top: 56px;
     z-index: 999;
-    background-color: white;
+    //background-color: white;
     padding: 0.75rem;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid;
   }
 
 }
