@@ -13,6 +13,7 @@ import { AutofocusDirective } from '../../directives/autofocus.directive';
 import {Bonuses} from '../../models/bonuses.model';
 import {BonusesEndpoint} from '../../services/bonuses-endpoint.service';
 import { NgxMaskDirective } from 'ngx-mask';
+import {ConfigurationService} from '../../services/configuration.service';
 
 interface Todo {
   $$index?: number;
@@ -39,6 +40,7 @@ export class BonusesComponent implements OnInit {
   private authService = inject(AuthService);
   private modalService = inject(NgbModal);
   private bonusesService = inject(BonusesEndpoint);
+  private configurationService = inject(ConfigurationService);
 
   gT = (key: string) => this.translationService.getTranslation(key);
 
@@ -192,7 +194,11 @@ export class BonusesComponent implements OnInit {
     setTimeout(() => {
       this.formResetToggle = true;
 
-      this.bonusEdit = {};
+      this.bonusEdit = {
+        totalCounter: 0,
+        currentCounter: 0,
+        setting: this.configurationService.defaultSetting
+      };
       this.modalService.open(this.editorModalTemplate());
     });
   }

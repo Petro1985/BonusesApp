@@ -1,3 +1,4 @@
+using BonusesApp.Core.Extensions;
 using BonusesApp.Core.Infrastructure;
 using BonusesApp.Core.Models.Bonuses;
 using BonusesApp.Core.Services.Bonuses.Interfaces;
@@ -12,10 +13,11 @@ public class BonusService(ApplicationDbContext appContext) : IBonusService
         IQueryable<BonusesEntity> query = appContext.Bonuses; 
         if (!string.IsNullOrWhiteSpace(search))
         {
+            search = search.ToLower();
             query = query
                 .Where(x => 
                     EF.Functions.Like(x.PhoneNumber, $"%{search}%") ||
-                    EF.Functions.Like(x.Name, $"%{search}%"));
+                    EF.Functions.Like(x.Name.ToLower(), $"%{search}%"));
         }
         
         var totalCount = await query.CountAsync(cancellationToken);
@@ -48,6 +50,17 @@ public class BonusService(ApplicationDbContext appContext) : IBonusService
     public async Task AddBonusesAsync(BonusesEntity newBonuses, CancellationToken cancellationToken = default)
     {
         appContext.Bonuses.Add(newBonuses);
+        await appContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task SetSettingToAll(int settingValue, CancellationToken cancellationToken = default)
+    {
+        var allBonuses = await appContext.Bonuses.ToListAsync(cancellationToken);
+        foreach (var bonus in allBonuses)
+        {
+            bonus.Setting = settingValue;
+        }
+        appContext.UpdateRange(allBonuses);
         await appContext.SaveChangesAsync(cancellationToken);
     }
 

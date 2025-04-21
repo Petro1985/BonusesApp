@@ -39,6 +39,14 @@ public interface IBonusService
     Task AddBonusesAsync(BonusesEntity newBonuses, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Установка общего значения настройки всем клиентам
+    /// </summary>
+    /// <param name="settingValue">Устанавливаемое значение</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task SetSettingToAll(int settingValue, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Выдача бонуса клиенту
     /// </summary>
     /// <param name="id">Идентификатор записи по бонусам</param>

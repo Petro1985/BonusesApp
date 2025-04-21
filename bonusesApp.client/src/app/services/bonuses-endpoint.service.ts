@@ -15,6 +15,7 @@ export class BonusesEndpoint extends EndpointBase {
   private configurations = inject(ConfigurationService);
   get bonusesUrl() { return this.configurations.baseUrl + '/api/bonuses'; }
   get giveBonusUrl() { return this.configurations.baseUrl + '/api/bonuses/{0}/giveBonus'; }
+  get setSettingToAllUrl() { return this.configurations.baseUrl + '/api/bonuses/setSettingToAll'; }
 
   getBonuses(offset: number, limit: number, search: string): Observable<BonusesResponse> {
 
@@ -62,6 +63,16 @@ export class BonusesEndpoint extends EndpointBase {
     return this.http.post<void>(url, null, this.requestHeaders).pipe(
       catchError(error => {
         return this.handleError<void>(error, () => this.giveBonus(id));
+      }));
+  }
+
+  setSettingToAll(setting: number): Observable<void> {
+    const url = this.setSettingToAllUrl;
+
+    const content = JSON.stringify({'setting': setting});
+    return this.http.post<void>(url, content, this.requestHeaders).pipe(
+      catchError(error => {
+        return this.handleError<void>(error, () => this.setSettingToAll(setting));
       }));
   }
 }

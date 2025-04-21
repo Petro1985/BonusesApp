@@ -39,6 +39,19 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-md-12">
+      <hr class="hr-separator info-separator" />
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <label for="defaultSetting" class="col-sm-3 col-form-label">{{'preferences.DefaultSetting' | translate}} </label>
+    <div class="col-sm-4">
+      <input class="form-control" id="defaultSetting" type="number" [(ngModel)]="configurations.defaultSetting"/>
+    </div>
+    <button class="btn btn-primary col-sm-5 mt-2 mt-sm-0 col-11" (click)="this.setDefaultSettingToAll()">{{'preferences.SetSettingForAllClients' | translate}}</button>
+  </div>
 
   <div class="row">
     <div class="col-md-12">
@@ -46,15 +59,13 @@
     </div>
   </div>
   <div class="row">
-    <div class="offset-sm-3 col-sm-9">
-      <div class="d-flex flex-row flex-wrap">
-        <button type="button" (click)="reloadFromServer()" class="btn btn-success ms-auto ms-sm-0 me-2 mb-2">
-          <i class='fa fa-circle-o-notch'></i> {{'preferences.ResetDefault' | translate}}
-        </button>
-        <button type="button" (click)="setAsDefault()" class="btn btn-primary mb-2">
-          <i class='fa fa-hdd-o'></i> {{'preferences.SetDefault' | translate}}
-        </button>
-      </div>
+    <div class="d-flex flex-row flex-wrap justify-content-evenly w-100 row-gap-2">
+      <button type="button" (click)="reloadFromServer()" class="btn btn-success">
+        <i class='fa fa-circle-o-notch'></i> {{'preferences.ResetDefault' | translate}}
+      </button>
+      <button type="button" (click)="setAsDefault()" class="btn btn-primary">
+        <i class='fa fa-hdd-o'></i> {{'preferences.SetDefault' | translate}}
+      </button>
     </div>
   </div>
 </div>

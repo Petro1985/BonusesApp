@@ -237,6 +237,9 @@
     }
   },
   "preferences": {
+    "DefaultSetting": "Default setting",
+    "SetSettingForAllClients": "Set default setting to all clients",
+    "SetSettingForAllClientsQuestion": "Are you sure to set to all clients setting = {0}?",
     "ReloadPreferences": "Reload Preferences:",
     "ReloadPreferencesHint": "Load default preferences (local changes are discarded)",
     "Language": "Language:",
@@ -371,7 +374,7 @@
       "CurrentCounter": "CurrentCounter",
       "AddCount": "Add counter",
       "Setting": "Setting",
-      "Search": "Search for phone number...",
+      "Search": "Search ...",
       "HideCompleted": "Hide Completed",
       "Important": "Mark as important",
       "Description": "Description",

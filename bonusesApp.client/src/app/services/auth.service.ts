@@ -29,7 +29,6 @@ export class AuthService {
   private localStorage = inject(LocalStoreManager);
 
   public readonly loginUrl = '/login';
-  public get homeUrl() { return this.configurations.homeUrl; }
 
   public loginRedirectUrl: string | null = null;
   public logoutRedirectUrl: string | null = null;
@@ -58,13 +57,8 @@ export class AuthService {
     this.router.navigate([page], navigationExtras);
   }
 
-  gotoHomePage() {
-    this.router.navigate([this.homeUrl]);
-  }
-
   redirectLoginUser() {
-    const redirect = this.loginRedirectUrl && this.loginRedirectUrl !== '/' &&
-      this.loginRedirectUrl !== ConfigurationService.defaultHomeUrl ? this.loginRedirectUrl : this.homeUrl;
+    const redirect = ConfigurationService.defaultHomeUrl ;
     this.loginRedirectUrl = null;
 
     const urlParamsAndFragment = Utilities.splitInTwo(redirect, '#');

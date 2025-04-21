@@ -1,0 +1,7 @@
+docker run -it --rm \
+  -p 80:80 \
+  -v "$(pwd)/certbot/etc:/etc/letsencrypt" \
+  -v "$(pwd)/certbot/var:/var/lib/letsencrypt" \
+  certbot/certbot certonly \
+  --standalone \
+  -d www.peremenacoffee.ru -d www.petr-prozorov.ru

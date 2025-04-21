@@ -131,10 +131,10 @@
         </li>
 
         <li class="page-item">
-        <span class="page-link"><strong>
-          Показаны с {{ (offset) * pageSize + ( totalItems === 0? 0 : 1) }} по {{ Math.min((offset + 1) * pageSize, totalItems) }}
-          всего {{ totalItems }}</strong>
-        </span>
+          <span class="page-link"><strong>
+            Показаны с {{ (offset) * pageSize + ( totalItems === 0? 0 : 1) }} по {{ Math.min((offset + 1) * pageSize, totalItems) }}
+            всего {{ totalItems }}</strong>
+          </span>
         </li>
 
         <li class="page-item" [class.disabled]="offset === Math.floor((totalItems - 1) / pageSize)">

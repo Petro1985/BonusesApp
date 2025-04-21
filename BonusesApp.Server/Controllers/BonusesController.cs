@@ -112,6 +112,22 @@ public class BonusesController : BaseApiController
         return NoContent();
     }
 
+    /// <summary>
+    /// Добавление новой записи о бонусах клиента
+    /// </summary>
+    /// <param name="request">Информация по добавляемым бонусам</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("SetSettingToAll")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> SetDefaultSetting([FromBody]SetSettingToAllRequest request, CancellationToken cancellationToken)
+    {
+        await _bonusService.SetSettingToAll(request.Setting, cancellationToken);
+        return NoContent();
+    }
+
     private void PrepareRequest(AddBonusesRequest request)
     {
         if (!request.PhoneNumber.StartsWith("+7"))
