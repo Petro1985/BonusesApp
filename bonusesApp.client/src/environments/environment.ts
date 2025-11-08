@@ -12,7 +12,8 @@ import { Environment } from "../app/models/environment.model";
 
 export const environment: Environment = {
   production: false,
-  baseUrl: 'https://localhost:7085', // API Server url
+  baseUrl: '', // Используем относительные пути для работы через прокси в режиме разработки
+  // baseUrl: 'https://localhost:7085', // Прямое подключение (если прокси не используется)
   // baseUrl: 'http://192.168.0.108:5225', // API Server url
   fallbackBaseUrl: 'https://quickapp.azurewebsites.net', // Fallback API Server for development without local API server
 };

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace BonusesApp.Server.Controllers;
 
 [Microsoft.AspNetCore.Components.Route("api/bonuses")]
-[Authorize]
 public class BonusesController : BaseApiController
 {
     private readonly IBonusService _bonusService;
@@ -20,6 +19,45 @@ public class BonusesController : BaseApiController
     }
 
     /// <summary>
+    /// Публичная проверка бонусов по номеру телефона (без авторизации)
+    /// </summary>
+    /// <param name="phoneNumber">Номер телефона</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("check")]
+    [AllowAnonymous]
+    [ProducesResponseType(200, Type = typeof(BonusesVM))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> CheckBonuses([FromQuery] string phoneNumber, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(phoneNumber))
+        {
+            return BadRequest("Phone number is required");
+        }
+
+        // Нормализация номера телефона
+        var normalizedPhone = phoneNumber.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "");
+        if (!normalizedPhone.StartsWith("+7") && !normalizedPhone.StartsWith("7"))
+        {
+            normalizedPhone = "+7" + normalizedPhone;
+        }
+        else if (normalizedPhone.StartsWith("7") && !normalizedPhone.StartsWith("+7"))
+        {
+            normalizedPhone = "+" + normalizedPhone;
+        }
+
+        var (bonuses, _) = await _bonusService.GetBonusesAsync(0, 1, normalizedPhone, cancellationToken);
+        
+        if (bonuses == null || bonuses.Count == 0)
+        {
+            return NotFound("Client with the specified phone number was not found");
+        }
+
+        var responseBonus = Mapper.Map<BonusesVM>(bonuses[0]);
+        return Ok(responseBonus);
+    }
+
+    /// <summary>
     /// Получение бонусов клиентов
     /// </summary>
     /// <param name="offset"></param>
@@ -28,6 +66,7 @@ public class BonusesController : BaseApiController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
+    [Authorize]
     [ProducesResponseType(200, Type = typeof(BonusesResponse))]
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]
@@ -50,6 +89,7 @@ public class BonusesController : BaseApiController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpDelete("{id:int}")]
+    [Authorize]
     [ProducesResponseType(204)]
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]
@@ -67,6 +107,7 @@ public class BonusesController : BaseApiController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPost("{id:int}/giveBonus")]
+    [Authorize]
     [ProducesResponseType(204)]
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]
@@ -84,6 +125,7 @@ public class BonusesController : BaseApiController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPatch]
+    [Authorize]
     [ProducesResponseType(204)]
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]
@@ -101,6 +143,7 @@ public class BonusesController : BaseApiController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(204)]
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]
@@ -119,6 +162,7 @@ public class BonusesController : BaseApiController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPost("SetSettingToAll")]
+    [Authorize]
     [ProducesResponseType(204)]
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]

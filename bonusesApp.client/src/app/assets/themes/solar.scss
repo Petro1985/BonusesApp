@@ -17,6 +17,7 @@ $table-bg-scale: 0% !default; // Fix for deprecation: https://sass-lang.com/d/fu
 }
 
 .tooltip {
+  --bs-tooltip-bg: var(--bs-dark);
   --bs-tooltip-color: #fff;
 }
 

@@ -113,7 +113,8 @@ builder.Services.AddOpenIddict()
         }
 
         options.UseAspNetCore()
-               .EnableTokenEndpointPassthrough();
+               .EnableTokenEndpointPassthrough()
+               .DisableTransportSecurityRequirement(); // Разрешаем HTTP в режиме разработки
     })
     .AddValidation(options =>
     {

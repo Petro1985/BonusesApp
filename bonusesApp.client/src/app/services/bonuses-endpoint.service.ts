@@ -14,6 +14,7 @@ export class BonusesEndpoint extends EndpointBase {
   private http = inject(HttpClient);
   private configurations = inject(ConfigurationService);
   get bonusesUrl() { return this.configurations.baseUrl + '/api/bonuses'; }
+  get checkBonusesUrl() { return this.configurations.baseUrl + '/api/bonuses/check'; }
   get giveBonusUrl() { return this.configurations.baseUrl + '/api/bonuses/{0}/giveBonus'; }
   get setSettingToAllUrl() { return this.configurations.baseUrl + '/api/bonuses/setSettingToAll'; }
 
@@ -73,6 +74,16 @@ export class BonusesEndpoint extends EndpointBase {
     return this.http.post<void>(url, content, this.requestHeaders).pipe(
       catchError(error => {
         return this.handleError<void>(error, () => this.setSettingToAll(setting));
+      }));
+  }
+
+  checkBonuses(phoneNumber: string): Observable<Bonuses> {
+    const url = `${this.checkBonusesUrl}?phoneNumber=${encodeURIComponent(phoneNumber)}`;
+
+    // Публичный endpoint, не требует авторизации
+    return this.http.get<Bonuses>(url).pipe(
+      catchError(error => {
+        return this.handleError<Bonuses>(error, () => this.checkBonuses(phoneNumber));
       }));
   }
 }

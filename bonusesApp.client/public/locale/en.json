@@ -386,7 +386,8 @@
       "Download": "Download",
       "Delete": "Delete client",
       "DeleteQuestion": "Are you sure you want to delete the client \"{0}\" (phone {1})?",
-      "GiveBonusQuestion": "Are you sure you want to give bonus to the client \"{0}\" (phone {1})?"
+      "GiveBonusQuestion": "Are you sure you want to give bonus to the client \"{0}\" (phone {1})?",
+      "LastUpdate": "Last update"
     },
     "editor": {
       "PhoneNumber": "PhoneNumber",
@@ -399,5 +400,27 @@
       "PhoneNumberRequired": "Phone number is required",
       "BonusSettingRequired": "Bonus setting is required"
     }
+  },
+  "checkBonuses": {
+    "Title": "Check Bonuses",
+    "PhoneNumber": "Phone number",
+    "PhoneNumberPlaceholder": "Enter phone number",
+    "PhoneNumberRequired": "Phone number is required",
+    "EnterPhoneNumber": "Please enter a phone number",
+    "CheckBonuses": "Check bonuses",
+    "Checking": "Checking...",
+    "Login": "Login",
+    "BonusesFound": "Bonuses found",
+    "ClientName": "Client name",
+    "CurrentCounter": "Current counter",
+    "TotalCounter": "Total counter",
+    "Setting": "Setting",
+    "LastUpdate": "Last update",
+    "ClientNotFound": "Client not found",
+    "ClientNotFoundMessage": "Client with the specified phone number was not found in the system",
+    "CheckAnother": "Check another number",
+    "TryAgain": "Try again",
+    "Error": "Error",
+    "ErrorMessage": "An error occurred while checking bonuses. Please try again later."
   }
 }

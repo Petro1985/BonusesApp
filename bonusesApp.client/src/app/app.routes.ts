@@ -10,9 +10,8 @@ import { AuthGuard } from './services/auth-guard';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent),
-    canActivate: [AuthGuard],
-    title: 'Home'
+    loadComponent: () => import('./components/check-bonuses/check-bonuses.component').then(m => m.CheckBonusesComponent),
+    title: 'Check Bonuses'
   },
   {
     path: 'login',
@@ -20,22 +19,10 @@ export const routes: Routes = [
     title: 'Login'
   },
   {
-    path: 'customers',
-    loadComponent: () => import('./components/customers/customers.component').then(m => m.CustomersComponent),
+    path: 'home',
+    loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent),
     canActivate: [AuthGuard],
-    title: 'Customers'
-  },
-  {
-    path: 'products',
-    loadComponent: () => import('./components/products/products.component').then(m => m.ProductsComponent),
-    canActivate: [AuthGuard],
-    title: 'Products'
-  },
-  {
-    path: 'orders',
-    loadComponent: () => import('./components/orders/orders.component').then(m => m.OrdersComponent),
-    canActivate: [AuthGuard],
-    title: 'Orders'
+    title: 'Home'
   },
   {
     path: 'settings',
@@ -47,11 +34,6 @@ export const routes: Routes = [
     path: 'about',
     loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent),
     title: 'About Us'
-  },
-  {
-    path: 'home',
-    redirectTo: '/',
-    pathMatch: 'full'
   },
   {
     path: '**',

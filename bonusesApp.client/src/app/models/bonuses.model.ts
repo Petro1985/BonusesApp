@@ -9,5 +9,6 @@ export interface Bonuses {
   totalCounter: number;
   currentCounter: number;
   setting: number;
+  lastUpdate: Date;
   $$index?: number;
 }

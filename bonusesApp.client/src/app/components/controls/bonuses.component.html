@@ -125,20 +125,22 @@
   <div class="col-12 mt-3">
     <nav aria-label="Pagination">
       <ul class="pagination justify-content-center mb-0">
-        <li class="page-item" [class.disabled]="offset === 0">
-          <a class="page-link fa fa-arrow-left" href="javascript:;" (click)="onPage({offset: 0, pageSize: 10})">
+        <li class="" [class.disabled]="offset === 0">
+          <a class="page-link fa fa-arrow-left"  
+            (click)="onPage({offset: Math.max(offset - 1, 0), pageSize: 10})">
           </a>
         </li>
 
-        <li class="page-item">
+        <li>
           <span class="page-link"><strong>
             Показаны с {{ (offset) * pageSize + ( totalItems === 0? 0 : 1) }} по {{ Math.min((offset + 1) * pageSize, totalItems) }}
             всего {{ totalItems }}</strong>
           </span>
         </li>
 
-        <li class="page-item" [class.disabled]="offset === Math.floor((totalItems - 1) / pageSize)">
-          <a class="page-link fa fa-arrow-right" tabindex="-1" href="javascript:;" (click)="onPage({offset: offset + 1, pageSize: 10})">
+        <li class="" [class.disabled]="offset === Math.floor((totalItems - 1) / pageSize)">
+          <a class="page-link fa fa-arrow-right" 
+            (click)="onPage({offset: offset + 1, pageSize: 10})">
           </a>
         </li>
       </ul>
@@ -213,6 +215,12 @@
      container="body" (click)="addCount(row)">
     <i class="fa fa-plus"></i>
   </a>
+</ng-template>
+
+<ng-template #lastUpdateTemplate let-row="row" let-value="value">
+  <span class="inline-label">
+    {{ formatLastUpdate(value) }}
+  </span>
 </ng-template>
 
 

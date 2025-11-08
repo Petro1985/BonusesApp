@@ -1,0 +1,110 @@
+<div class="d-flex flex-column h-90 position-relative">
+  <!-- Основной контент в центре -->
+  <div class="check-bonuses-container m-auto flex-grow-1 d-flex flex-column justify-content-center">
+    <div class="card boxshadow">
+      <div class="card-header text-primary fw-bold text-center">
+        <i class="fa fa-gift" aria-hidden="true"></i>
+        {{ gT('checkBonuses.Title') }}
+      </div>
+      <div class="card-body">
+        <div class="col-md-10 offset-md-1 px-md-3">
+          <form class="check-bonuses-form" name="checkBonusesForm" #f="ngForm" novalidate
+                (ngSubmit)="checkBonuses()">
+            <div class="mb-4">
+              <label class="form-label" for="phone-number">
+                {{ gT('checkBonuses.PhoneNumber') }}
+              </label>
+              <input 
+                type="text" 
+                id="phone-number" 
+                name="phoneNumber" 
+                class="form-control form-control-lg"
+                placeholder="+7 (___) ___-__-__"
+                [(ngModel)]="phoneNumber"
+                #phoneNumberInput="ngModel"
+                required
+                prefix="+7 "
+                mask="(000) 000-00-00"
+                [disabled]="isLoading"
+                autofocus />
+              @if (f.submitted && !phoneNumberInput.valid) {
+                <span class="invalid-feedback d-block">
+                  {{ gT('checkBonuses.PhoneNumberRequired') }}
+                </span>
+              }
+            </div>
+            
+            <div class="mb-3 text-center">
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-lg w-100" 
+                [disabled]="isLoading">
+                @if (isLoading) {
+                  <i class='fa fa-circle-o-notch fa-spin'></i> 
+                  {{ gT('checkBonuses.Checking') }}
+                } @else {
+                  {{ gT('checkBonuses.CheckBonuses') }}
+                }
+              </button>
+            </div>
+          </form>
+
+          <!-- Результаты проверки -->
+          @if (bonuses) {
+            <div class="bonuses-result mt-4">
+              <div class="alert alert-success">
+                <h5 class="alert-heading">
+                  <i class="fa fa-check-circle"></i>
+                  {{ gT('checkBonuses.BonusesFound') }}
+                </h5>
+                <hr>
+                <p class="mb-2">
+                  <strong>{{ gT('checkBonuses.ClientName') }}:</strong> 
+                  {{ bonuses.name }}
+                </p>
+                <p class="mb-2">
+                  <strong>{{ gT('checkBonuses.CurrentCounter') }}:</strong> 
+                  {{ bonuses.currentCounter }}
+                </p>
+                <p class="mb-2">
+                  <strong>{{ gT('checkBonuses.TotalCounter') }}:</strong> 
+                  {{ bonuses.totalCounter }}
+                </p>
+                <p class="mb-2">
+                  <strong>{{ gT('checkBonuses.Setting') }}:</strong> 
+                  {{ bonuses.setting }}
+                </p>
+                <p class="mb-0">
+                  <strong>{{ gT('checkBonuses.LastUpdate') }}:</strong> 
+                  {{ formatLastUpdate(bonuses.lastUpdate) }}
+                </p>
+              </div>
+            </div>
+          }
+
+          @if (notFound && !isLoading) {
+            <div class="bonuses-result mt-4">
+              <div class="alert alert-info">
+                <h5 class="alert-heading">
+                  <i class="fa fa-info-circle"></i>
+                  {{ gT('checkBonuses.ClientNotFound') }}
+                </h5>
+                <p class="mb-0">
+                  {{ gT('checkBonuses.ClientNotFoundMessage') }}
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Ссылка на страницу логина - под карточкой на мобильных, справа внизу на десктопе -->
+  <div class="login-link-container">
+    <a routerLink="/login" class="login-link">
+      {{ gT('checkBonuses.Login') }}
+    </a>
+  </div>
+</div>
+

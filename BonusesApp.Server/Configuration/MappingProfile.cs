@@ -51,6 +51,7 @@ public class MappingProfile : Profile
             .ForMember(x => x.TotalCounter, map => map.MapFrom(s => s.TotalCount))
             .ForMember(x => x.CurrentCounter, map => map.MapFrom(s => s.CurrentCount))
             .ForMember(x => x.Setting, map => map.MapFrom(s => s.Setting))
+            .ForMember(x => x.LastUpdate, map => map.MapFrom(s => s.UpdatedDate))
             .ReverseMap();
 
         CreateMap<AddBonusesRequest, BonusesEntity>()

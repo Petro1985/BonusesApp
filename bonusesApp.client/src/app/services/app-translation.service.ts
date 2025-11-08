@@ -21,7 +21,7 @@ export class AppTranslationService {
 
   constructor() {
     this.addLanguages(['en', 'ru', 'fr', 'de', 'es', 'pt', 'zh', 'ko', 'ar']);
-    this.setDefaultLanguage('en');
+    this.setDefaultLanguage('ru');
   }
 
   addLanguages(lang: string[]) {
@@ -51,7 +51,7 @@ export class AppTranslationService {
   useBrowserLanguage(): string | void {
     const browserLang = this.getBrowserLanguage();
 
-    if (browserLang?.match(/en|ru|fr|de|es|pt|zh|ko|ar/)) {
+    if (browserLang?.match(/en|ru/)) {
       this.changeLanguage(browserLang);
       return browserLang;
     }

@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbModal, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { TableColumn, NgxDatatableModule } from '@siemens/ngx-datatable';
-
 import { AuthService } from '../../services/auth.service';
 import { AlertService, MessageSeverity, DialogType } from '../../services/alert.service';
 import { AppTranslationService } from '../../services/app-translation.service';
@@ -14,15 +13,6 @@ import {Bonuses} from '../../models/bonuses.model';
 import {BonusesEndpoint} from '../../services/bonuses-endpoint.service';
 import { NgxMaskDirective } from 'ngx-mask';
 import {ConfigurationService} from '../../services/configuration.service';
-
-interface Todo {
-  $$index?: number;
-  completed: boolean;
-  important: boolean;
-  name: string;
-  setting: string;
-  description: string;
-}
 
 @Component({
   selector: 'app-bonuses',
@@ -84,6 +74,8 @@ export class BonusesComponent implements OnInit {
   readonly deleteTemplate = viewChild.required<TemplateRef<unknown>>('deleteTemplate');
 
   readonly giveBonusTemplate = viewChild.required<TemplateRef<unknown>>('giveBonusTemplate');
+
+  readonly lastUpdateTemplate = viewChild.required<TemplateRef<unknown>>('lastUpdateTemplate');
 
   readonly editorModalTemplate = viewChild.required<TemplateRef<unknown>>('editorModal');
 
@@ -152,6 +144,17 @@ export class BonusesComponent implements OnInit {
         width: 160,
         minWidth: 70,
         cellTemplate: this.settingTemplate(),
+        resizeable: false,
+        canAutoResize: true,
+        sortable: false,
+        draggable: false
+      },
+      {
+        prop: 'lastUpdate',
+        name: this.gT('bonuses.management.LastUpdate'),
+        width: 180,
+        minWidth: 120,
+        cellTemplate: this.lastUpdateTemplate(),
         resizeable: false,
         canAutoResize: true,
         sortable: false,
@@ -269,7 +272,6 @@ export class BonusesComponent implements OnInit {
 
   onPage($event: {offset: number, pageSize: number}) {
     this.offset = $event.offset;
-    this.totalItems = $event.offset;
     this.pageSize = $event.pageSize;
     this.getBonuses(true);
   }
@@ -345,4 +347,24 @@ export class BonusesComponent implements OnInit {
   }
 
   protected readonly Math = Math;
+
+  // Форматирование даты в формате "dd.MM.YY HH.mm"
+  formatLastUpdate(date: Date | string | null | undefined): string {
+    if (!date) {
+      return '';
+    }
+
+    const d = new Date(date);
+    if (isNaN(d.getTime())) {
+      return '';
+    }
+
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = String(d.getFullYear()).slice(-2);
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
+  }
 }

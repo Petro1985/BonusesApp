@@ -1,1 +1,6 @@
 scp -r root@petr-prozorov.ru:/home/peter/bonuses-app/certbot/etc/live/peremenacoffee.ru/ .
+
+scp -r root@petr-prozorov.ru:/root/certs/live/petr-prozorov.ru/ .
+
+
+scp -r root@petr-prozorov.ru:/etc/letsencrypt/live/peremenacoffee.ru/ .

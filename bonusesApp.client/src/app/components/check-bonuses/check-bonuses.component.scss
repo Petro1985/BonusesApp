@@ -1,0 +1,107 @@
+.boxshadow {
+  position: relative;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 10px;
+  background: white;
+}
+
+.boxshadow::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
+  width: 70%;
+  left: 15%;
+  height: 100px;
+  bottom: 0;
+}
+
+.card-header {
+  padding: 0.75rem 1.25rem;
+}
+
+.h-90 {
+  height: 90%;
+}
+
+.position-relative {
+  position: relative;
+}
+
+// Ссылка на логин в правом нижнем углу
+.login-link-container {
+  position: static;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  order: 2; // В мобильной версии будет после карточки
+  z-index: 10;
+  
+  // На десктопе позиционируем абсолютно справа внизу
+  @media (min-width: 768px) {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 0;
+    order: 0; // Сбрасываем order для десктопа
+  }
+}
+
+.login-link {
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #495057;
+    background-color: #f8f9fa;
+    text-decoration: none;
+    border-color: #adb5bd;
+  }
+}
+
+@media (min-width: 768px) {
+  .check-bonuses-container {
+    width: 500px;
+    flex-grow: 0; // На десктопе не нужно растягивать контейнер
+  }
+}
+
+@media (min-width: 1200px) {
+  .check-bonuses-container {
+    width: 550px;
+  }
+}
+
+.bonuses-result {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-control-lg {
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+}
+

@@ -63,14 +63,14 @@ export class ConfigurationService {
   public static readonly appVersion = '9.19.0';
 
   // ***Specify default configurations here***
-  public static readonly defaultLanguage = 'en';
-  public static readonly defaultHomeUrl = '/';
+  public static readonly defaultLanguage = 'ru';
+  public static readonly defaultHomeUrl = '/home';
   public static readonly defaultThemeId = 1;
   public static readonly defaultSetting = 5;
 
   // ***End of defaults***
 
-  public baseUrl = environment.baseUrl ?? Utilities.baseUrl();
+  public baseUrl = environment.baseUrl || '';
   public fallbackBaseUrl = environment.fallbackBaseUrl;
 
   private _language: string | null = null;
