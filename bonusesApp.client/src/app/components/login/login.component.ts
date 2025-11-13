@@ -7,6 +7,8 @@
 import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 import { AlertService, MessageSeverity, DialogType } from '../../services/alert.service';
@@ -20,13 +22,14 @@ import { UserLogin } from '../../models/user-login.model';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   standalone: true,
-  imports: [FormsModule, NgClass]
+  imports: [FormsModule, NgClass, TranslateModule]
 })
 
 export class LoginComponent implements OnInit, OnDestroy {
   private alertService = inject(AlertService);
   private authService = inject(AuthService);
   private configurations = inject(ConfigurationService);
+  private router = inject(Router);
 
   userLogin = new UserLogin();
   isLoading = false;
@@ -148,5 +151,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.formResetToggle = true;
     });
+  }
+
+  navigateToRoot() {
+    this.router.navigate(['/']);
   }
 }

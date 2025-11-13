@@ -32,6 +32,16 @@ export class CheckBonusesComponent implements OnInit {
 
   gT = (key: string) => this.translationService.getTranslation(key);
 
+  // Проверка валидности номера телефона (должен содержать цифры, а не только префикс)
+  isPhoneNumberValid(): boolean {
+    if (!this.phoneNumber || this.phoneNumber.trim() === '') {
+      return false;
+    }
+    // Проверяем, что есть цифры (убираем все нецифровые символы и проверяем длину)
+    const digitsOnly = this.phoneNumber.replace(/\D/g, '');
+    return digitsOnly.length >= 10;
+  }
+
   ngOnInit() {
     // Если пользователь авторизован, редиректим на страницу home
     if (this.authService.isLoggedIn) {
@@ -40,7 +50,7 @@ export class CheckBonusesComponent implements OnInit {
   }
 
   checkBonuses() {
-    if (!this.phoneNumber || this.phoneNumber.trim() === '') {
+    if (!this.isPhoneNumberValid()) {
       this.alertService.showMessage(
         this.gT('checkBonuses.PhoneNumberRequired'),
         this.gT('checkBonuses.EnterPhoneNumber'),

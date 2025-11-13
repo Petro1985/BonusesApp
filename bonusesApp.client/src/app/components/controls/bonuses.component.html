@@ -76,7 +76,7 @@
               <i class="fa fa-lg fa-plus"></i>
             </a>
           </p>
-          <p class="mb-3">
+          <p class="mb-2">
             <strong>{{ 'bonuses.editor.Setting' | translate }}:</strong>
             @if (editing[card.$$index + '-setting']) {
               <input class="" style="display: inline" appAutofocus type="text" [value]="card.setting"
@@ -87,6 +87,21 @@
               {{ card.setting }}
               <a class="" href="javascript:;" ngbTooltip="{{'bonuses.management.EditSetting' | translate}}"
                  container="body" (click)="editing[card.$$index + '-setting'] = true">
+                <i class="fa fa-pencil"></i>
+              </a>
+            }
+          </p>
+          <p class="mb-3">
+            <strong>{{ 'bonuses.editor.Comment' | translate }}:</strong>
+            @if (editing[card.$$index + '-comment']) {
+              <input class="" style="display: block; width: 100%;" appAutofocus type="text" [value]="card.comment || ''"
+                     (blur)="updateCommentValue($event, card)"
+                     (keydown.enter)="updateCommentValue($event, card)"
+                     (keydown.escape)="editing[card.$$index + '-comment'] = false"/>
+            } @else {
+              {{ card.comment || '' }}
+              <a class="" href="javascript:;" ngbTooltip="{{'bonuses.management.EditComment' | translate}}"
+                 container="body" (click)="editing[card.$$index + '-comment'] = true">
                 <i class="fa fa-pencil"></i>
               </a>
             }
@@ -162,6 +177,25 @@
           attr.title="{{'bonuses.management.DoubleClickToEdit' | translate}}"
           (dblclick)="editing[row.$$index + '-name'] = true">
       {{ value }}
+    </span>
+  }
+</ng-template>
+
+<ng-template #commentTemplate let-row="row" let-value="value">
+  @if (editing[row.$$index + '-comment']) {
+    <input class="inline-editor" appAutofocus type="text" [value]="value || ''"
+           (blur)="updateCommentValue($event, row)"
+           (keydown.enter)="updateCommentValue($event, row)"
+           (keydown.escape)="editing[row.$$index + '-comment'] = false"/>
+  } @else {
+    <a class="me-2" href="javascript:;" ngbTooltip="{{'bonuses.management.EditComment' | translate}}"
+       container="body" (click)="editing[row.$$index + '-comment'] = true">
+      <i class="fa fa-pencil"></i>
+    </a>
+    <span class="inline-label" 
+          attr.title="{{'bonuses.management.DoubleClickToEdit' | translate}}"
+          (dblclick)="editing[row.$$index + '-comment'] = true">
+      {{ value || '' }}
     </span>
   }
 </ng-template>
@@ -262,6 +296,15 @@
             <input type="text" id="clientName" name="clientName" placeholder="Enter client's name" class="form-control"
                    [ngClass]=""
                    [(ngModel)]="bonusEdit.name" #taskName="ngModel"/>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label class="col-form-label col-md-5" for="bonusComment">{{ 'bonuses.editor.Comment' | translate }}:</label>
+          <div class="col-md-7">
+            <textarea id="bonusComment" name="bonusComment" placeholder="Enter comment" class="form-control"
+                   rows="3"
+                   [(ngModel)]="bonusEdit.comment" #bonusComment="ngModel"></textarea>
           </div>
         </div>
 

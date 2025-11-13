@@ -14,20 +14,6 @@
             <form class="login" name="loginForm" #f="ngForm" novalidate
                   (ngSubmit)="f.form.valid ? login() :
                             (!password.valid && showErrorAlert('Password is required', 'Please enter a valid password'))">
-<!--              <div class="mb-3 row">-->
-<!--                <label class="col-form-label text-md-end col-md-4" for="login-username">Username:</label>-->
-<!--                <div class="col-md-8">-->
-<!--                  <input type="text" id="login-username" name="username" placeholder="Enter username"-->
-<!--                         autocomplete="username" class="form-control"-->
-<!--                         [ngClass]="{'is-valid': f.submitted && username.valid, 'is-invalid' : f.submitted && !username.valid}"-->
-<!--                         [(ngModel)]="userLogin.userName" #username="ngModel" required />-->
-<!--                  @if (f.submitted && !username.valid) {-->
-<!--                    <span class="invalid-feedback">-->
-<!--                      Username is required-->
-<!--                    </span>-->
-<!--                  }-->
-<!--                </div>-->
-<!--              </div>-->
               <div class="mb-3 row">
                 <label class="col-form-label text-md-end col-md-4" for="login-password">Password:</label>
                 <div class="col-md-8">
@@ -53,7 +39,7 @@
               </div>
               <div class="mb-3 row">
                 <div class="offset-md-4 col-md-8">
-                  <div class="d-flex align-items-stretch">
+                  <div class="d-flex align-items-stretch justify-content-between">
                     <button type="submit" class="btn btn-primary text-nowrap" [disabled]="isLoading">
                       @if (isLoading) {
                         <i class='fa fa-circle-o-notch fa-spin'></i> {{'Logging in...'}}
@@ -61,6 +47,9 @@
                       @else {
                         {{'Login'}}
                       }
+                    </button>
+                    <button type="button" class="btn btn-secondary text-nowrap" (click)="navigateToRoot()">
+                      {{'login.ToCheckBonuses' | translate}}
                     </button>
                   </div>
                 </div>

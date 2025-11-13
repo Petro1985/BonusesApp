@@ -53,6 +53,7 @@
     "RegisterIntro": "Нет аккаунта?",
     "Register": "Зарегистрироваться",
     "RecoverPassword": "Забыли пароль?",
+    "ToCheckBonuses": "К проверке бонусов",
     "alerts": {
       "UsernameRequired": "Имя пользователя обязательно",
       "EnterValidUsername": "Пожалуйста, введите нормальное им пользователя",
@@ -354,11 +355,13 @@
       "DoubleClickToEdit": "Двойной щелчок для редактирования",
       "EditSetting": "Изменить настройку",
       "EditName": "Изменить имя",
+      "EditComment": "Изменить комментарий",
       "Download": "Загрузить",
       "Delete": "Удалить клиента",
       "DeleteQuestion": "Вы действительно хотите удалить клиента \"{0}\" (телефон {1})?",
       "GiveBonusQuestion": "Вы действительно хотите дать бонус клиенту \"{0}\" (телефон {1})?",
-      "LastUpdate": "Последнее обновление"
+      "LastUpdate": "Последнее обновление",
+      "Comment": "Комментарий"
     },
     "editor": {
       "AddClient": "Добавить клиента",
@@ -369,7 +372,8 @@
       "BonusSettingRequired": "Настройка обязательна",
       "TotalCounter": "Общее количество",
       "CurrentCounter": "Текущее количество",
-      "Setting": "Настройка"
+      "Setting": "Настройка",
+      "Comment": "Комментарий"
     }
   },
   "checkBonuses": {
@@ -383,7 +387,7 @@
     "Login": "Вход",
     "BonusesFound": "Бонусы найдены",
     "ClientName": "Имя клиента",
-    "CurrentCounter": "Текущее значение",
+    "CurrentCounter": "Бонусы",
     "TotalCounter": "Всего",
     "Setting": "Настройка",
     "LastUpdate": "Последнее изменение",

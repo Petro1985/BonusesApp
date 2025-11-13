@@ -11,4 +11,6 @@ public class BonusesEntity : BaseEntity
     public int CurrentCount { get; set; }
 
     public int Setting { get; set; }
+    
+    public string Comment { get; set; }
 }

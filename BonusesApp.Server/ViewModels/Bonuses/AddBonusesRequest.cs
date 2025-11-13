@@ -7,4 +7,5 @@ public class AddBonusesRequest
     public int TotalCounter { get; set; }
     public int CurrentCounter { get; set; }
     public int Setting { get; set; }
+    public string Comment { get; set; }
 }

@@ -27,7 +27,7 @@ export class AppTitleService extends TitleStrategy {
       }
 
       if (AppTitleService.appName) {
-        title += ` - ${AppTitleService.appName}`;
+        title = AppTitleService.appName;
       }
 
       this.titleService.setTitle(title);

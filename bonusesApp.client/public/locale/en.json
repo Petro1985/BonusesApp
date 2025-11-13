@@ -53,6 +53,7 @@
     "RegisterIntro": "Don't have an account?",
     "Register": "Register",
     "RecoverPassword": "Forgot password?",
+    "ToCheckBonuses": "To check bonuses",
     "alerts": {
       "UsernameRequired": "Username is required",
       "EnterValidUsername": "Please enter a valid username",
@@ -383,11 +384,13 @@
       "DoubleClickToEdit": "Double click to edit",
       "EditSetting": "Edit setting",
       "EditName": "Edit name",
+      "EditComment": "Edit comment",
       "Download": "Download",
       "Delete": "Delete client",
       "DeleteQuestion": "Are you sure you want to delete the client \"{0}\" (phone {1})?",
       "GiveBonusQuestion": "Are you sure you want to give bonus to the client \"{0}\" (phone {1})?",
-      "LastUpdate": "Last update"
+      "LastUpdate": "Last update",
+      "Comment": "Comment"
     },
     "editor": {
       "PhoneNumber": "PhoneNumber",
@@ -398,7 +401,8 @@
       "AddClient": "AddClient",
       "NewClient": "New client",
       "PhoneNumberRequired": "Phone number is required",
-      "BonusSettingRequired": "Bonus setting is required"
+      "BonusSettingRequired": "Bonus setting is required",
+      "Comment": "Comment"
     }
   },
   "checkBonuses": {
@@ -412,7 +416,7 @@
     "Login": "Login",
     "BonusesFound": "Bonuses found",
     "ClientName": "Client name",
-    "CurrentCounter": "Current counter",
+    "CurrentCounter": "Bonuses",
     "TotalCounter": "Total counter",
     "Setting": "Setting",
     "LastUpdate": "Last update",

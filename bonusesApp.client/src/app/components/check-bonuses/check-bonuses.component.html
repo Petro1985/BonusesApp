@@ -19,6 +19,7 @@
                 id="phone-number" 
                 name="phoneNumber" 
                 class="form-control form-control-lg"
+                [ngClass]="{'is-invalid': f.submitted && (!phoneNumberInput.valid || !isPhoneNumberValid())}"
                 placeholder="+7 (___) ___-__-__"
                 [(ngModel)]="phoneNumber"
                 #phoneNumberInput="ngModel"
@@ -27,7 +28,7 @@
                 mask="(000) 000-00-00"
                 [disabled]="isLoading"
                 autofocus />
-              @if (f.submitted && !phoneNumberInput.valid) {
+              @if (f.submitted && (!phoneNumberInput.valid || !isPhoneNumberValid())) {
                 <span class="invalid-feedback d-block">
                   {{ gT('checkBonuses.PhoneNumberRequired') }}
                 </span>
@@ -65,14 +66,6 @@
                 <p class="mb-2">
                   <strong>{{ gT('checkBonuses.CurrentCounter') }}:</strong> 
                   {{ bonuses.currentCounter }}
-                </p>
-                <p class="mb-2">
-                  <strong>{{ gT('checkBonuses.TotalCounter') }}:</strong> 
-                  {{ bonuses.totalCounter }}
-                </p>
-                <p class="mb-2">
-                  <strong>{{ gT('checkBonuses.Setting') }}:</strong> 
-                  {{ bonuses.setting }}
                 </p>
                 <p class="mb-0">
                   <strong>{{ gT('checkBonuses.LastUpdate') }}:</strong> 

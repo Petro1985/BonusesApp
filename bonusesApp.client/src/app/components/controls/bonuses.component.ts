@@ -67,6 +67,8 @@ export class BonusesComponent implements OnInit {
 
   readonly nameTemplate = viewChild.required<TemplateRef<unknown>>('nameTemplate');
 
+  readonly commentTemplate = viewChild.required<TemplateRef<unknown>>('commentTemplate');
+
   readonly settingTemplate = viewChild.required<TemplateRef<unknown>>('settingTemplate');
 
   readonly readOnlyTemplate = viewChild.required<TemplateRef<unknown>>('readOnlyTemplate');
@@ -117,6 +119,17 @@ export class BonusesComponent implements OnInit {
         draggable: false
       },
       {
+        prop: 'comment',
+        name: this.gT('bonuses.management.Comment'),
+        width: 200,
+        minWidth: 180,
+        cellTemplate: this.commentTemplate(),
+        resizeable: false,
+        canAutoResize: true,
+        sortable: false,
+        draggable: false
+      },
+      {
         prop: 'totalCounter',
         name: this.gT('bonuses.management.TotalCounter'),
         width: 100,
@@ -153,7 +166,7 @@ export class BonusesComponent implements OnInit {
         prop: 'lastUpdate',
         name: this.gT('bonuses.management.LastUpdate'),
         width: 180,
-        minWidth: 120,
+        minWidth: 165,
         cellTemplate: this.lastUpdateTemplate(),
         resizeable: false,
         canAutoResize: true,
@@ -225,6 +238,13 @@ export class BonusesComponent implements OnInit {
   updateNameValue(event: any, row: Bonuses) {
     row.name = event.target.value
     this.editing[row.$$index + '-name'] = false;
+
+    this.updateBonusEntry(row);
+  }
+
+  updateCommentValue(event: any, row: Bonuses) {
+    row.comment = event.target.value
+    this.editing[row.$$index + '-comment'] = false;
 
     this.updateBonusEntry(row);
   }

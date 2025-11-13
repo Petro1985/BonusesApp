@@ -15,4 +15,5 @@ public class BonusesVM
     public int CurrentCounter { get; set; }
     public int Setting { get; set; }
     public DateTime LastUpdate { get; set; }
+    public string Comment { get; set; }
 }
