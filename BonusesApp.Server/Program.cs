@@ -17,6 +17,7 @@ using BonusesApp.Core.Services.Bonuses.Interfaces;
 using BonusesApp.Server.Authorization;
 using BonusesApp.Server.Authorization.Requirements;
 using BonusesApp.Server.Configuration;
+using BonusesApp.Server.Filters;
 using BonusesApp.Server.Services;
 using BonusesApp.Server.Services.Email;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -146,7 +147,11 @@ builder.Services.AddAuthorizationBuilder()
 // Add cors
 builder.Services.AddCors();
 
-builder.Services.AddControllers();
+// Добавляем глобальный фильтр исключений
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>();
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

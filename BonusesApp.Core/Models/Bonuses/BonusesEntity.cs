@@ -12,5 +12,5 @@ public class BonusesEntity : BaseEntity
 
     public int Setting { get; set; }
     
-    public string Comment { get; set; }
+    public string? Comment { get; set; }
 }
