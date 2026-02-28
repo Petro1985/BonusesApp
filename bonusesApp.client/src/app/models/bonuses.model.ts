@@ -6,10 +6,10 @@ export interface Bonuses {
   id: number;
   phoneNumber: string;
   name: string;
+  comment: string;
   totalCounter: number;
   currentCounter: number;
   setting: number;
   lastUpdate: Date;
-  comment: string;
   $$index?: number;
 }
