@@ -1,16 +1,23 @@
-﻿version: '3.9'
-services:
+﻿services:
   app:
-    build:
-      context: .
-      dockerfile: BonusesApp.Server/Dockerfile
+    image: bonusesapp-app:latest
     ports:
       - "443:5001"
       - "80:8080"
     depends_on:
       - db
     environment:
+      - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=MyDb;User ID=postgres;Password=123qwe!@#QWE
+      # TLS: PFX from host (Let's Encrypt renewal). Path inside container matches Kestrel override.
+      - Kestrel__Endpoints__Https__Certificate__Path=/app/ssl-certs/yourcert.pfx
+      - Kestrel__Endpoints__Https__Certificate__Password=
+      # OpenIddict signing/encryption cert from host (replace when expired; not the same as HTTPS cert).
+      - OIDC__Certificates__Path=/app/ssl-certs/authcert.pfx
+    volumes:
+      - /etc/bonusesapp/ssl:/app/ssl-certs:ro
+      - /etc/bonusesapp/logs:/app/Logs
+    restart: unless-stopped
   db:
     image: postgres:15
     restart: always

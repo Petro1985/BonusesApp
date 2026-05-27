@@ -3,6 +3,9 @@
 ###############################################################################
 * text=auto
 
+# Linux VPS: shebang breaks if CRLF (\r) is present
+scripts/vps/*.sh text eol=lf
+
 ###############################################################################
 # Set default behavior for command prompt diff.
 #

@@ -1,0 +1,73 @@
+BonusesApp TLS on VPS (Let's Encrypt -> yourcert.pfx -> container)
+
+1) On the VPS install certbot (e.g. apt install certbot).
+
+2) Copy scripts/vps/*.sh to the same directory on the server (or keep a full git clone under ~/bonuses-app).
+   chmod +x ~/bonuses-app/scripts/vps/*.sh
+
+3) Create TLS defaults (adjust domain, email, paths):
+
+   sudo tee /etc/default/bonusesapp-tls <<'EOF'
+   BONUSESAPP_TLS_DOMAIN=your.hostname.example
+   BONUSESAPP_TLS_EMAIL=you@example.com
+   BONUSESAPP_COMPOSE_DIR=/root/bonuses-app
+   # Optional if compose file is not remote_docker-compose.yml or docker-compose.yml in that dir:
+   # BONUSESAPP_COMPOSE_FILE=docker-compose.yml
+   EOF
+
+4) First certificate (frees TCP 80 for a short time — app container is stopped):
+
+   set -a && . /etc/default/bonusesapp-tls && set +a
+   sudo -E ~/bonuses-app/scripts/vps/issue-initial-cert-standalone.sh "${BONUSESAPP_TLS_DOMAIN}"
+
+5) Persist certbot hooks for renewals (edit the renewal conf created for your domain):
+
+   sudo nano /etc/letsencrypt/renewal/${BONUSESAPP_TLS_DOMAIN}.conf
+
+   Add these lines in [renewalparams] (paths must match where you installed scripts):
+
+   pre_hook = /root/bonuses-app/scripts/vps/bonusesapp-certbot-pre.sh
+   post_hook = /root/bonuses-app/scripts/vps/bonusesapp-certbot-post.sh
+   deploy_hook = /root/bonuses-app/scripts/vps/bonusesapp-deploy-pfx.sh
+
+   (bonusesapp-deploy-pfx.sh reads /etc/default/bonusesapp-tls for BONUSESAPP_TLS_DOMAIN.)
+
+6) Host directory for the PFX (created by deploy hook):
+
+   sudo mkdir -p /etc/bonusesapp/ssl
+
+   The deploy script sets directory mode 755 and chowns yourcert.pfx to UID/GID 1654
+   (default non-root user in dotnet aspnet:9.0). If your image uses another user,
+   set BONUSESAPP_PFX_UID and BONUSESAPP_PFX_GID in /etc/default/bonusesapp-tls
+   (check with: docker compose -f remote_docker-compose.yml exec app id).
+
+7) remote_docker-compose.yml mounts that directory and overrides Kestrel certificate path.
+   After changing compose: docker compose -f remote_docker-compose.yml up -d
+
+7b) OpenIddict authcert.pfx (separate from HTTPS yourcert; if it expires you see
+   InvalidOperationException: at least one of the registered certificates must be valid):
+
+   Add to /etc/default/bonusesapp-tls (must match appsettings OIDC Certificates Password):
+
+   BONUSESAPP_OIDC_PFX_PASSWORD=123qwe!@#QWE
+
+   Then:
+
+   set -a && . /etc/default/bonusesapp-tls && set +a
+   ~/bonuses-app/scripts/vps/generate-oidc-authcert.sh
+   docker compose -f ~/bonuses-app/remote_docker-compose.yml restart app
+
+   remote_docker-compose sets OIDC__Certificates__Path=/app/ssl-certs/authcert.pfx
+
+8) Bi-monthly cron (certbot only renews when close to expiry; this run rebuilds PFX and restarts app):
+
+   sudo crontab -e
+
+   0 4 1 Jan,Mar,May,Jul,Sep,Nov * /root/bonuses-app/scripts/vps/renew-bonusesapp-tls-cron.sh
+
+Notes
+- If the app throws UnauthorizedAccessException on /app/ssl-certs/yourcert.pfx, on the host run:
+  chmod 755 /etc/bonusesapp/ssl && chown 1654:1654 /etc/bonusesapp/ssl/yourcert.pfx && chmod 640 /etc/bonusesapp/ssl/yourcert.pfx
+- PFX password is empty; matches appsettings Kestrel certificate Password "".
+- OpenIddict uses authcert.pfx from the same host directory (see step 7b); rotating it logs users out until they sign in again.
+- DNS must point to this VPS for HTTP-01 standalone to work.

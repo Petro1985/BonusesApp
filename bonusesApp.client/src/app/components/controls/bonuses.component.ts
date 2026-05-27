@@ -304,6 +304,7 @@ export class BonusesComponent implements OnInit {
   }
 
   private updateBonusEntry(row: Bonuses) {
+    row.comment = row.comment ?? '';
     if (this.debounceTimeoutDict.has(row.id)) {
       clearTimeout(this.debounceTimeoutDict.get(row.id));
     }
