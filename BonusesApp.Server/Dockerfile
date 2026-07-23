@@ -30,6 +30,8 @@ RUN dotnet publish "BonusesApp.Server.csproj" -c $BUILD_CONFIGURATION -o /app/pu
 
 FROM base AS final
 WORKDIR /app
+ENV DOTNET_EnableDiagnostics=0 \
+    DOTNET_gcServer=0
 COPY yourcert.pfx ./yourcert.pfx
 COPY authcert.pfx ./authcert.pfx
 COPY --from=publish /app/publish .

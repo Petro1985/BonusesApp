@@ -13,8 +13,8 @@ COMPOSE_FILE="${BONUSESAPP_COMPOSE_FILE:-}"
 cd "${COMPOSE_DIR}"
 if [[ -n "${COMPOSE_FILE}" ]]; then
   docker compose -f "${COMPOSE_FILE}" "$@"
-elif [[ -f "${COMPOSE_DIR}/remote_docker-compose.yml" ]]; then
-  docker compose -f remote_docker-compose.yml "$@"
+elif [[ -f "${COMPOSE_DIR}/docker-compose.yml" ]]; then
+  docker compose -f docker-compose.yml "$@"
 else
   docker compose "$@"
 fi

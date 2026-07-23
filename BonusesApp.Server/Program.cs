@@ -33,7 +33,11 @@ var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(connectionString, b => b.MigrationsAssembly(migrationsAssembly));
+    options.UseNpgsql(connectionString, b =>
+    {
+        b.MigrationsAssembly(migrationsAssembly);
+        b.CommandTimeout(300); // 5 minutes
+    });
     options.UseOpenIddict();
 });
 

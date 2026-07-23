@@ -1,33 +1,46 @@
-﻿services:
+﻿# Production compose for low-RAM VPS (~384 MiB).
+# After first deploy: chown -R 1654:1654 /etc/bonusesapp/logs
+# TLS: /etc/bonusesapp/ssl must contain yourcert.pfx and authcert.pfx (see scripts/vps/00-SETUP-TLS.txt)
+services:
   app:
     image: bonusesapp-app:latest
     ports:
       - "443:5001"
       - "80:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=MyDb;User ID=postgres;Password=123qwe!@#QWE
-      # TLS: PFX from host (Let's Encrypt renewal). Path inside container matches Kestrel override.
       - Kestrel__Endpoints__Https__Certificate__Path=/app/ssl-certs/yourcert.pfx
       - Kestrel__Endpoints__Https__Certificate__Password=
-      # OpenIddict signing/encryption cert from host (replace when expired; not the same as HTTPS cert).
       - OIDC__Certificates__Path=/app/ssl-certs/authcert.pfx
+      - OIDC__Certificates__Password=123qwe!@#QWE
+      - DOTNET_EnableDiagnostics=0
+      - DOTNET_gcServer=0
     volumes:
       - /etc/bonusesapp/ssl:/app/ssl-certs:ro
       - /etc/bonusesapp/logs:/app/Logs
     restart: unless-stopped
   db:
-    image: postgres:15
-    restart: always
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123qwe!@#QWE
       POSTGRES_DB: MyDb
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d MyDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 volumes:
   pgdata:
