@@ -59,11 +59,19 @@ BonusesApp TLS on VPS (Let's Encrypt -> yourcert.pfx -> container)
 
    remote_docker-compose sets OIDC__Certificates__Path=/app/ssl-certs/authcert.pfx
 
-8) Bi-monthly cron (certbot only renews when close to expiry; this run rebuilds PFX and restarts app):
+8) Install bi-monthly cron + run renew once now (preferred):
 
-   sudo crontab -e
+   ~/bonuses-app/scripts/vps/install-tls-renew-cron.sh
+   # Cron only:        SKIP_RUN_NOW=1 ~/bonuses-app/scripts/vps/install-tls-renew-cron.sh
+   # First run if due: RUN_NOW_FORCE=0 ~/bonuses-app/scripts/vps/install-tls-renew-cron.sh
+   # Log: /var/log/bonusesapp-tls-renew.log
+   # Schedule: 04:00 on 1st of Jan,Mar,May,Jul,Sep,Nov (FORCE_RENEW=0 = only when due)
 
-   0 4 1 Jan,Mar,May,Jul,Sep,Nov * /root/bonuses-app/scripts/vps/renew-bonusesapp-tls-cron.sh
+8b) Manual force renew (stop app, free :80, --force-renewal, rebuild PFX, start app):
+
+   set -a && . /etc/default/bonusesapp-tls && set +a
+   ~/bonuses-app/scripts/vps/force-renew-https.sh
+   # Optional: FORCE_RENEW=0 ~/bonuses-app/scripts/vps/force-renew-https.sh  # only if due
 
 Notes
 - If the app throws UnauthorizedAccessException on /app/ssl-certs/yourcert.pfx, on the host run:
