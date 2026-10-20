@@ -13,7 +13,7 @@ LETSENCRYPT_LIVE="/etc/letsencrypt/live/${DOMAIN}"
 PFX_DIR="${BONUSESAPP_PFX_DIR:-/etc/bonusesapp/ssl}"
 PFX_PATH="${PFX_DIR}/yourcert.pfx"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# Official mcr.microsoft.com/dotnet/aspnet:9.0 runs as non-root APP_UID (default 1654).
+# Official mcr.microsoft.com/dotnet/aspnet:10.0 runs as non-root APP_UID (default 1654).
 PFX_UID="${BONUSESAPP_PFX_UID:-1654}"
 PFX_GID="${BONUSESAPP_PFX_GID:-1654}"
 
@@ -35,4 +35,6 @@ mv "${PFX_PATH}.new" "${PFX_PATH}"
 chown "${PFX_UID}:${PFX_GID}" "${PFX_PATH}"
 chmod 640 "${PFX_PATH}"
 
-"${SCRIPT_DIR}/bonusesapp-compose-cmd.sh" restart app
+# `restart` fails if the container is stopped (common: deploy_hook runs before post_hook).
+# `up -d` works whether app is stopped or already running and picks up the new PFX.
+"${SCRIPT_DIR}/bonusesapp-compose-cmd.sh" up -d --no-deps app

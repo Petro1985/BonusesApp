@@ -367,3 +367,8 @@ FodyWeavers.xsd
 **/*.Development.*
 
 /images/**
+
+# SQLite
+*.db
+*.db-wal
+*.db-shm

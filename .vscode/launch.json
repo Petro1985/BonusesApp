@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/BonusesApp.Server/bin/Debug/net9.0/BonusesApp.Server.dll",
+            "program": "${workspaceFolder}/BonusesApp.Server/bin/Debug/net10.0/BonusesApp.Server.dll",
             "args": [],
             "cwd": "${workspaceFolder}/BonusesApp.Server",
             "stopAtEntry": false,

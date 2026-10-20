@@ -1,11 +1,11 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 USER $APP_UID
 
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 5001
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS  mysdk
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS  mysdk
 RUN apt-get update && \
     apt-get install -y curl && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
@@ -30,6 +30,9 @@ RUN dotnet publish "BonusesApp.Server.csproj" -c $BUILD_CONFIGURATION -o /app/pu
 
 FROM base AS final
 WORKDIR /app
+USER root
+RUN mkdir -p /data && chown "$APP_UID:$APP_UID" /data
+USER $APP_UID
 ENV DOTNET_EnableDiagnostics=0 \
     DOTNET_gcServer=0
 COPY yourcert.pfx ./yourcert.pfx

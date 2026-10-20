@@ -1,9 +1,9 @@
-# **QuickApp** - ASPNET Core 9 / Angular 19 project template
+# **QuickApp** - ASPNET Core 10 / Angular 19 project template
 [![MIT license](https://cdn.rawgit.com/emonney/tempa/7e9d69ad/MITLicense.png)](https://github.com/emonney/QuickApp/blob/master/LICENSE)
 [![VSIX Downloads](https://img.shields.io/visual-studio-marketplace/d/adentum.QuickApp-ASPNETCoreAngularXProjectTemplate)](https://marketplace.visualstudio.com/items?itemName=adentum.QuickApp-ASPNETCoreAngularXProjectTemplate)
 [![Twitter Follow](https://img.shields.io/twitter/follow/kommand?style=social)](https://twitter.com/kommand)
 
-A startup **Angular 19 / ASP.NET Core 9** (cross-platform ) **project template** with an end-to-end login, user and role management implementation.
+A startup **Angular 19 / ASP.NET Core 10** (cross-platform ) **project template** with an end-to-end login, user and role management implementation.
 As well as other common functionalities for **Quick Application Development**.
 
 🚀The mission with QuickApp is to simplify the software development process using ASP.Net Core and Angular, empowering engineers to efficiently build amazing software.
@@ -40,7 +40,7 @@ ___
 ## This application consists of:
 
 *   Template pages with Angular 19 and TypeScript
-*   RESTful API Backend using ASP.NET Core 9 Web API
+*   RESTful API Backend using ASP.NET Core 10 Web API
 *   Database using Entity Framework Core
 *   Authentication/Authorization based on OIDC/OAuth2 and ASP.NET Core Identity
 *   API Documentation using Swagger

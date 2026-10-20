@@ -1,5 +1,7 @@
-﻿# Production compose for low-RAM VPS (~384 MiB).
-# After first deploy: chown -R 1654:1654 /etc/bonusesapp/logs
+﻿# Production compose for a low-RAM VPS. SQLite lives in the app process.
+# After first deploy:
+#   sudo mkdir -p /etc/bonusesapp/logs /etc/bonusesapp/data
+#   sudo chown -R 1654:1654 /etc/bonusesapp/logs /etc/bonusesapp/data
 # TLS: /etc/bonusesapp/ssl must contain yourcert.pfx and authcert.pfx (see scripts/vps/00-SETUP-TLS.txt)
 services:
   app:
@@ -7,9 +9,6 @@ services:
     ports:
       - "443:5001"
       - "80:8080"
-    depends_on:
-      db:
-        condition: service_healthy
     logging:
       driver: json-file
       options:
@@ -17,7 +16,7 @@ services:
         max-file: "2"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=MyDb;User ID=postgres;Password=123qwe!@#QWE
+      - ConnectionStrings__DefaultConnection=Data Source=/data/bonuses.db;Cache=Shared;Mode=ReadWriteCreate
       - Kestrel__Endpoints__Https__Certificate__Path=/app/ssl-certs/yourcert.pfx
       - Kestrel__Endpoints__Https__Certificate__Password=
       - OIDC__Certificates__Path=/app/ssl-certs/authcert.pfx
@@ -27,20 +26,5 @@ services:
     volumes:
       - /etc/bonusesapp/ssl:/app/ssl-certs:ro
       - /etc/bonusesapp/logs:/app/Logs
+      - /etc/bonusesapp/data:/data
     restart: unless-stopped
-  db:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123qwe!@#QWE
-      POSTGRES_DB: MyDb
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d MyDb"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
-volumes:
-  pgdata:

@@ -15,6 +15,7 @@ using BonusesApp.Core.Services.Account.Interfaces;
 using BonusesApp.Core.Services.Bonuses;
 using BonusesApp.Core.Services.Bonuses.Interfaces;
 using BonusesApp.Server.Authorization;
+using BonusesApp.Server.Infrastructure;
 using BonusesApp.Server.Authorization.Requirements;
 using BonusesApp.Server.Configuration;
 using BonusesApp.Server.Filters;
@@ -28,16 +29,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                 throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+connectionString = SqliteDatabasePath.Prepare(connectionString, builder.Environment.ContentRootPath);
 
 var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddSingleton<SqlitePragmaInterceptor>();
+
+builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
 {
-    options.UseNpgsql(connectionString, b =>
+    options.UseSqlite(connectionString, b =>
     {
         b.MigrationsAssembly(migrationsAssembly);
-        b.CommandTimeout(300); // 5 minutes
+        b.CommandTimeout(30);
     });
+    options.AddInterceptors(sp.GetRequiredService<SqlitePragmaInterceptor>());
     options.UseOpenIddict();
 });
 

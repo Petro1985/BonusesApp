@@ -18,8 +18,8 @@ echo "=== app logs (last 40 lines) ==="
 docker compose -f "$COMPOSE_FILE" logs app --tail 40 2>&1 || true
 
 echo ""
-echo "=== db logs (last 20 lines) ==="
-docker compose -f "$COMPOSE_FILE" logs db --tail 20 2>&1 || true
+echo "=== sqlite file ==="
+ls -lh /etc/bonusesapp/data/bonuses.db 2>&1 || echo "missing /etc/bonusesapp/data/bonuses.db"
 
 echo ""
 echo "=== ssl on host ==="
@@ -27,4 +27,4 @@ ls -la /etc/bonusesapp/ssl 2>&1 || echo "missing /etc/bonusesapp/ssl"
 
 echo ""
 echo "=== listen ports ==="
-ss -tlnp | grep -E ':80|:443|:5432' || true
+ss -tlnp | grep -E ':80|:443' || true

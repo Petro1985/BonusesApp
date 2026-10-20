@@ -7,47 +7,17 @@ services:
     ports:
       - "443:5001"
       - "80:8080"
-    depends_on:
-      - db
-    mem_limit: 512m
+    mem_limit: 384m
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
     environment:
-      - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=MyDb;User ID=postgres;Password=123qwe!@#QWE
+      - ConnectionStrings__DefaultConnection=Data Source=/data/bonuses.db;Cache=Shared;Mode=ReadWriteCreate
       - DOTNET_EnableDiagnostics=0
       - DOTNET_gcServer=0
-  db:
-    image: postgres:15-alpine
-    restart: always
-    mem_limit: 256m
-    shm_size: 64mb
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123qwe!@#QWE
-      POSTGRES_DB: MyDb
-    command:
-      - postgres
-      - -c
-      - shared_buffers=32MB
-      - -c
-      - effective_cache_size=128MB
-      - -c
-      - work_mem=4MB
-      - -c
-      - maintenance_work_mem=32MB
-      - -c
-      - max_connections=30
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - sqlite-data:/data
 volumes:
-  pgdata:
+  sqlite-data:

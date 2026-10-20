@@ -55,9 +55,9 @@ fi
 
 certbot "${RENEW_ARGS[@]}"
 
-# deploy-pfx rebuilds PFX and restarts app; disable trap so we don't double-start
+# deploy-pfx rebuilds PFX and ensures app is up; disable trap so we don't double-start
 trap - EXIT
-echo "==> Building yourcert.pfx and restarting app"
+echo "==> Building yourcert.pfx and ensuring app is up"
 "${SCRIPT_DIR}/bonusesapp-deploy-pfx.sh"
 
 echo "==> LE cert dates:"
