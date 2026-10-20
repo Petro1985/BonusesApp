@@ -7,7 +7,7 @@
     </div>
   </div>
   <div class="col-lg-4">
-    <ul class="nav flex-row">
+    <ul class="nav flex-row flex-wrap">
       <li class="nav-item toolbaritem">
         <a class="nav-link" href="javascript:;" (click)="addClient()">
           <i class="fa fa-plus"></i> {{ 'bonuses.management.AddClient' | translate }}
@@ -17,6 +17,12 @@
         <a class="nav-link" href="javascript:;" (click)="downloadBonuses()">
           <i class="fa fa-cloud-download"></i> {{ 'bonuses.management.Download' | translate }}
         </a>
+      </li>
+      <li class="nav-item toolbaritem">
+        <a class="nav-link" href="javascript:;" (click)="uploadInput.click()">
+          <i class="fa fa-cloud-upload"></i> {{ 'bonuses.management.Upload' | translate }}
+        </a>
+        <input #uploadInput type="file" accept=".csv,text/csv" hidden (change)="uploadBonuses($event)"/>
       </li>
     </ul>
   </div>

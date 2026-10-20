@@ -1,6 +1,7 @@
 using AutoMapper;
 using BonusesApp.Core.Models.Bonuses;
 using BonusesApp.Core.Services.Bonuses.Interfaces;
+using BonusesApp.Server.Services;
 using BonusesApp.Server.ViewModels.Bonuses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -153,6 +154,32 @@ public class BonusesController : BaseApiController
         var newBonuses = Mapper.Map<BonusesEntity>(request);
         await _bonusService.AddBonusesAsync(newBonuses, cancellationToken);
         return NoContent();
+    }
+
+    /// <summary>
+    /// Загрузка CSV, скачанного с этой страницы.
+    /// Совпадение по номеру телефона обновляет запись, новый номер создаёт запись.
+    /// Клиенты, которых нет в файле, не удаляются.
+    /// </summary>
+    [HttpPost("import")]
+    [Authorize]
+    [Consumes("multipart/form-data")]
+    [RequestSizeLimit(2 * 1024 * 1024)]
+    [RequestFormLimits(MultipartBodyLengthLimit = 2 * 1024 * 1024)]
+    [ProducesResponseType(200, Type = typeof(BonusesImportResult))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(403)]
+    public async Task<IActionResult> ImportBonuses(IFormFile? file, CancellationToken cancellationToken)
+    {
+        if (file == null || file.Length == 0)
+        {
+            throw new ArgumentException("Файл пуст.");
+        }
+
+        await using var stream = file.OpenReadStream();
+        var rows = BonusesCsvReader.Read(stream);
+        var result = await _bonusService.ImportBonusesAsync(rows, cancellationToken);
+        return Ok(result);
     }
 
     /// <summary>

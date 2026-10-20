@@ -75,4 +75,77 @@ public class BonusService(ApplicationDbContext appContext) : IBonusService
         appContext.Update(bonuses);
         await appContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<BonusesImportResult> ImportBonusesAsync(
+        IReadOnlyList<BonusesImportItem> rows,
+        CancellationToken cancellationToken = default)
+    {
+        var existing = await appContext.Bonuses
+            .OrderBy(x => x.Name)
+            .ThenBy(x => x.PhoneNumber)
+            .ThenBy(x => x.Id)
+            .ToListAsync(cancellationToken);
+
+        var pending = existing
+            .GroupBy(x => NormalizePhone(x.PhoneNumber))
+            .ToDictionary(group => group.Key, group => new Queue<BonusesEntity>(group));
+
+        var result = new BonusesImportResult();
+
+        foreach (var row in rows)
+        {
+            var key = NormalizePhone(row.PhoneNumber);
+            if (pending.TryGetValue(key, out var queue) && queue.Count > 0)
+            {
+                ApplyImport(queue.Dequeue(), row);
+                result.Updated++;
+                continue;
+            }
+
+            appContext.Bonuses.Add(new BonusesEntity
+            {
+                PhoneNumber = row.PhoneNumber,
+                Name = row.Name,
+                Comment = row.Comment,
+                TotalCount = row.TotalCount,
+                CurrentCount = row.CurrentCount,
+                Setting = row.Setting
+            });
+            result.Created++;
+        }
+
+        await appContext.SaveChangesAsync(cancellationToken);
+        return result;
+    }
+
+    private static void ApplyImport(BonusesEntity entity, BonusesImportItem row)
+    {
+        entity.PhoneNumber = row.PhoneNumber;
+        entity.Name = row.Name;
+        entity.Comment = row.Comment;
+        entity.TotalCount = row.TotalCount;
+        entity.CurrentCount = row.CurrentCount;
+        entity.Setting = row.Setting;
+    }
+
+    public static string NormalizePhone(string? phone)
+    {
+        if (string.IsNullOrWhiteSpace(phone))
+        {
+            return "";
+        }
+
+        var digits = new string(phone.Where(char.IsDigit).ToArray());
+        if (digits.Length == 11 && digits[0] == '8')
+        {
+            digits = "7" + digits[1..];
+        }
+
+        if (digits.Length == 10)
+        {
+            digits = "7" + digits;
+        }
+
+        return digits.Length > 0 ? digits : phone.Trim().ToLowerInvariant();
+    }
 }

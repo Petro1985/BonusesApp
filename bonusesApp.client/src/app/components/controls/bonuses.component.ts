@@ -337,19 +337,20 @@ export class BonusesComponent implements OnInit {
     this.bonusesService.getBonuses(0, 2_147_483_647, '')
       .subscribe(x =>
       {
-        const data = x.bonuses;
+        const data = x.bonuses ?? [];
         const csvRows = [];
 
         const firstLine = this.columns.slice(0, -1).map(x => x.name).join(';');
-        // Заголовки
-        const headers = Object.keys(data[0]);
         csvRows.push(firstLine);
 
-        // Данные
+        const fields: (keyof Bonuses)[] = [
+          'id', 'phoneNumber', 'name', 'comment', 'totalCounter', 'currentCounter', 'setting', 'lastUpdate'
+        ];
         for (const row of data) {
-          const values = headers.map(header => {
-            const escaped = ('' + row[header as keyof Bonuses]).replace(/"/g, '\\"');
-            return `"${escaped}"`;
+          const values = fields.map(header => {
+            const raw = row[header];
+            const text = raw == null ? '' : String(raw);
+            return `"${text.replace(/"/g, '\\"')}"`;
           });
           csvRows.push(values.join(';'));
         }
@@ -365,6 +366,37 @@ export class BonusesComponent implements OnInit {
         a.click();
         document.body.removeChild(a);
       });
+  }
+
+  uploadBonuses(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) {
+      return;
+    }
+
+    this.loadingIndicator = true;
+    this.bonusesService.importBonuses(file).subscribe({
+      next: result => {
+        const detail = this.gT('bonuses.management.UploadSuccessMessage')
+          .replace('{0}', String(result.created))
+          .replace('{1}', String(result.updated));
+        this.alertService.showMessage(
+          this.gT('bonuses.management.UploadSuccess'),
+          detail,
+          MessageSeverity.success);
+        this.getBonuses(true);
+      },
+      error: (error: { error?: { message?: string } }) => {
+        this.loadingIndicator = false;
+        const detail = error?.error?.message || this.gT('bonuses.management.UploadFailedMessage');
+        this.alertService.showMessage(
+          this.gT('bonuses.management.UploadFailed'),
+          detail,
+          MessageSeverity.error);
+      }
+    });
   }
 
   protected readonly Math = Math;

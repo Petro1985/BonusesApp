@@ -53,4 +53,10 @@ public interface IBonusService
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task GiveBonusesAsync(int id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Создаёт или обновляет клиентов из файла выгрузки. Совпадение — по номеру телефона.
+    /// Записи, которых нет в файле, не удаляются.
+    /// </summary>
+    Task<BonusesImportResult> ImportBonusesAsync(IReadOnlyList<BonusesImportItem> rows, CancellationToken cancellationToken = default);
 }

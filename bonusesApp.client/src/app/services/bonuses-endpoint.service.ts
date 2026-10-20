@@ -1,11 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { EndpointBase } from './endpoint-base.service';
 import { ConfigurationService } from './configuration.service';
-import {Bonuses, BonusesResponse} from '../models/bonuses.model';
+import {Bonuses, BonusesImportResult, BonusesResponse} from '../models/bonuses.model';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +74,17 @@ export class BonusesEndpoint extends EndpointBase {
     return this.http.post<void>(url, content, this.requestHeaders).pipe(
       catchError(error => {
         return this.handleError<void>(error, () => this.setSettingToAll(setting));
+      }));
+  }
+
+  importBonuses(file: File): Observable<BonusesImportResult> {
+    const form = new FormData();
+    form.append('file', file, file.name);
+    const headers = (this.requestHeaders.headers as HttpHeaders).delete('Content-Type');
+
+    return this.http.post<BonusesImportResult>(`${this.bonusesUrl}/import`, form, { headers }).pipe(
+      catchError(error => {
+        return this.handleError<BonusesImportResult>(error, () => this.importBonuses(file));
       }));
   }
 
